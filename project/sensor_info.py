@@ -4,6 +4,7 @@
 # Input required temp_id to acquire temperature reading for the probe
 
 import re
+import DateTime
 
 
 temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
@@ -11,9 +12,9 @@ temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
 # Temp_id = 'id0101'
 
 
-def temp_function(id):
+def temp_function(sensor):
     # Return a positive or negative value for temp if CRC is good
-    temp_file = temp_directory + id
+    temp_file = temp_directory + sensor
     with open(temp_file) as temp_readline:
         # reads first line of the file , checks CRC(reading good or bad)
         temp_crc = temp_readline.readline()
@@ -46,12 +47,29 @@ def temp_formatted(current_temp):
         return rounded_temp
 
 
+def return_current_date():
+    # returns current date
+    current_date = DateTime.DateTime()
+    formatted_date = current_date.strftime("%Y-%m-%d")
+    return formatted_date
+
+
+def return_current_time():
+    # returns current military time CST
+    current_time = DateTime.DateTime()
+    formatted_time = current_time.strftime("%H:%M:%S")
+    return formatted_time
+
+
 def main(id_sensor):
     temp = temp_function(id_sensor)
     formatted_temp = temp_formatted(temp)
-    print(formatted_temp)
+    return formatted_temp
 
 
 if __name__ == "__main__":
-    sesnor_id = 'id0101'
-    main(sesnor_id)
+    # Returns temp
+    sensor_id = 'id0101'
+    print(main(sensor_id))
+    print(return_current_date())
+    print(return_current_time())
