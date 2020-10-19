@@ -7,6 +7,8 @@ import re
 import DateTime
 
 
+
+
 temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
 # Test - Mock data locally stored in a .txt file
 # Temp_id = 'id0101'
@@ -61,15 +63,7 @@ def return_current_time():
     return formatted_time
 
 
-def main(id_sensor):
+def return_current_temp(id_sensor):
     temp = temp_function(id_sensor)
     formatted_temp = temp_formatted(temp)
     return formatted_temp
-
-
-if __name__ == "__main__":
-    # Returns temp
-    sensor_id = 'id0101'
-    print(main(sensor_id))
-    print(return_current_date())
-    print(return_current_time())
