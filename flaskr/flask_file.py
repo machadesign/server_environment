@@ -9,7 +9,16 @@ current_time = return_current_time()
 current_date = return_current_date()
 current_temp = return_current_temp(sensor_id)
 
-print(current_time)
+# how to set default value for all static files
+# app.config['File'] = 300
+
+
+@app.after_request
+def add_header(response):
+    # check if cache control is setup header ,if not do not store cache for static files
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store'
+    return response
 
 # TODO header instruction needed set cache to 0
 @app.route('/')
