@@ -8,6 +8,7 @@ sensor_id = 'id0101'
 current_time = return_current_time()
 current_date = return_current_date()
 current_temp = return_current_temp(sensor_id)
+temp_plot = '/images/todays_temp_chart.png'
 
 # how to set default value for all static files
 # app.config['File'] = 300
@@ -23,7 +24,7 @@ def add_header(response):
 # TODO header instruction needed set cache to 0
 @app.route('/')
 def environment_dashboard():
-    return render_template('homepage.html', date=current_date, time=current_time, temp=current_temp)
+    return render_template('homepage.html', date=current_date, time=current_time, temp=current_temp, image=temp_plot)
 
 
 if __name__ == "__main__":

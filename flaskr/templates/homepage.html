@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/static/templates.css"/>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<h2>{{ date }}   {{ time }}</h2>
-<h2>current temp: {{ temp }}</h2>
-<h1></h1>
+    <h2>{{ date }}   {{ time }}</h2>
+    <h2>current temp: {{ temp }}</h2>
+    <div class="images" align="middle" >
+        <img src="{{url_for('static', filename=image)}}" align="middle"/>
+    </div>
+    <h1></h1>
 </body>
 </html>
