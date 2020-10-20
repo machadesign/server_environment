@@ -67,3 +67,9 @@ def return_current_temp(id_sensor):
     temp = temp_function(id_sensor)
     formatted_temp = temp_formatted(temp)
     return formatted_temp
+
+
+sensor_id = 'id0101'
+current_temp = return_current_temp(sensor_id)
+current_time = return_current_time()
+todays_date = return_current_date()
