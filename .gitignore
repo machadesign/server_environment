@@ -13,3 +13,4 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+project/DB_file.db
