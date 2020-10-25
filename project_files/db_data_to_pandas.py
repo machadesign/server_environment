@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 # TODO - meant to connect to a live DB server , currently just creating a db file
 class PandaTheInfo:
-    file_location = '/Users/matthewchadwell/server_environment/server_environmnet/static/images/todays_temp_chart.png'
+    file_location = '/Users/matthewchadwell/server_environment/flask_dir/static/images/todays_temp_chart.png'
     date = str(todays_date)
 
     def panda_db_info(self, db_file):
