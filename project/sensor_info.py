@@ -11,7 +11,6 @@ temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
 # Test - Mock data locally stored in a .txt file
 
 
-
 def temp_function(sensor):
     # Return a positive or negative value for temp if CRC is good
     temp_file = temp_directory + sensor
