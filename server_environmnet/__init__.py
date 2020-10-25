@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+# File contains flask logic
 
 from flask import Flask, render_template
 from sensor_info import return_current_time, return_current_date, return_current_temp

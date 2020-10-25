@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 # TODO - meant to connect to a live DB server , currently just creating a db file
 class PandaTheInfo:
-    file_location = '/Users/matthewchadwell/server_environment/flaskr/static/images/todays_temp_chart.png'
+    file_location = '/Users/matthewchadwell/server_environment/server_environmnet/static/images/todays_temp_chart.png'
     date = str(todays_date)
 
     def panda_db_info(self, db_file):
@@ -26,8 +26,7 @@ class PandaTheInfo:
         sorted_day.plot(title=self.date, x='time', y='temperature', kind='scatter').get_figure()
         plt.gca().invert_yaxis()
         plt.savefig(self.file_location)
-        plt.show()
-        # return days_graphic
+        # plt.show()   Note : Connection remains open, only show for testing purposes
 
 
 database_file = 'DB_file.db'
