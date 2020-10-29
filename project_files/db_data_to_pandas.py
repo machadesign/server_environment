@@ -26,7 +26,7 @@ class PandaTheInfo:
         sorted_day.plot(title=self.date, x='time', y='temperature', kind='scatter').get_figure()
         plt.gca().invert_yaxis()
         plt.savefig(self.file_location)
-        # plt.show()   Note : Connection remains open, only show for testing purposes
+        plt.show()   # Note : Connection remains open, only show for testing purposes
 
 
 database_file = 'DB_file.db'

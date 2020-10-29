@@ -1,6 +1,8 @@
+#!/usr/bin/env python
+
 from sqlalchemy import MetaData
 from sqlalchemy.sql import select
-from db_init import engine
+from db_engine import engine
 from db_creation import environment
 
 metadata = MetaData()

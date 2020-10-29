@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+
 # Create table schema and engine created to interact with the DB
 
 from sqlalchemy import *
-from db_init import engine
+# from sqlalchemy import MetaData
+from db_engine import engine
 
 meta = MetaData()
 
