@@ -1,5 +1,4 @@
 {
-  "temp_scatter_plot_location":
-
-
+  "port": 5050,
+  "sensor_id": "id0101"
 }
