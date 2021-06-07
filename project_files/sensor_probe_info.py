@@ -5,7 +5,12 @@
 
 import re
 import DateTime
+import json
+from reboot_check import round_value
 
+
+with open('/Users/matthewchadwell/server_environment/config') as r:
+    data = json.load(r)
 
 temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
 # Test - Mock data locally stored in a .txt file
@@ -37,13 +42,13 @@ def temp_function(sensor):
 
 def temp_formatted(current_temp):
     if current_temp == 999999:
-        rounded_temp = 999999
-        return rounded_temp
+        temp_error_code = 999999
+        return temp_error_code
     else:
         temp_int = int(current_temp[0])
         temp_data = temp_int / 1000
-        rounded_temp = format(temp_data, '.2f')
-        return rounded_temp
+        whole_num_to_float = format(temp_data, '.2f')
+        return whole_num_to_float
 
 
 def return_current_date():
@@ -66,7 +71,10 @@ def return_current_temp(id_sensor):
     return formatted_temp
 
 
-sensor_id = 'id0101'
-current_temp = return_current_temp(sensor_id)
+sensor_id = data['sensor_id']
+raw_temp = float(return_current_temp(sensor_id))
+print(raw_temp)
+current_temp = round_value(raw_temp, 'temp_format_round')
+print(current_temp)
 current_time = return_current_time()
 todays_date = return_current_date()

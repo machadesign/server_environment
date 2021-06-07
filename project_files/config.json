@@ -1,0 +1,20 @@
+{
+    "Contact_email": "svp.chadwell@gmail.com",
+    "Sender_email": "svp.chadwell@gmail.com",
+    "poll_check": 1,
+    "time_check": 2,
+    "ambient_sensor_id": "id0101",
+    "reset_reboot_counter": "YES",
+    "reboot_warning": "ON",
+    "load_average_threshold": 3,
+    "load_above_threshold_count": 5,
+    "percent_swap_warning": 10,
+    "percent_memory_warning": 10,
+    "gpu_temp_warning": 10,
+    "cpu_temp_warning": 20,
+    "ambient_temp_warning": 12,
+    "round_memory": 2,
+    "round_swap": 2,
+    "round_system_load": 1,
+    "round_temp": 0
+}
