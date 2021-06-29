@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--    <script>-->
+<!--        <link rel="stylesheet" href="/static/home_page.css"/>-->
+<!--    </script>-->
+</head>
+
+<!--<html>-->
+   <body>
+
+
+<!--      <form action = "http://localhost:5000/login" method = "post">-->
+          <form action = "" method = "post">
+              <!-- action: The URL that the form data is sent to on submit.
+Generate it with url_for within py script. It can be omitted if the same URL handles showing the form and processing the data. -->
+
+<!-- from details https://overiq.com/flask-101/form-handling-in-flask/ -->
+<!--If post not specified  query string (request.args) with the GET method occurs instead. -->
+       <a href="/">
+           < Dashboard
+       </a>
+              <br>
+              <br>
+
+      <legend>Server settings :</legend>
+              <br>
+<!--      {{ form.hidden_tag() }}-->
+
+        <div id="poll_check" >
+        {{ form.hidden_tag() }}
+        {{ form.poll_check.label }} {{ form.poll_check }}
+        </div>
+
+
+ <!-- REBOOT  -->
+
+        <div id="reset_reboot_counter" >
+        {{ form.hidden_tag() }}
+        {{ form.reset_reboot_counter.label }} {{ form.reset_reboot_counter }}
+        </div>
+
+
+        <div id="reboot_warning" >
+        {{ form.hidden_tag() }}
+        {{ form.reboot_warning.label }} {{ form.reboot_warning }}
+        </div>
+
+<!-- TEMPERATURE -->
+
+          <div id="cpu_warning_level">
+        {{ form.hidden_tag() }}
+        {{ form.cpu_temp_warning.label }} {{ form.cpu_temp_warning }}
+          </div>
+
+          <div id="gpu_warning_level">
+        {{ form.hidden_tag() }}
+        {{ form.gpu_temp_warning.label }} {{ form.gpu_temp_warning }}
+          </div>
+
+          <div id="ambient_warning_level">
+        {{ form.hidden_tag() }}
+        {{ form.ambient_temp_warning.label }}  {{ form.ambient_temp_warning }}
+          </div>
+
+          <br>
+          <div id="memory_warning_level">
+        {{ form.hidden_tag() }}
+        {{ form.percent_memory_warning.label }}  {{ form.percent_memory_warning }}
+          </div>
+
+          <div id="swap_warning_level">
+        {{ form.hidden_tag() }}
+        {{ form.percent_swap_warning.label }}  {{ form.percent_swap_warning }}
+          </div>
+          <br>
+
+          <div id="time_check">
+        {{ form.hidden_tag() }}
+        {{ form.time_check.label }}  {{ form.time_check }}
+          </div>
+
+        <div id="load_average_threshold">
+        {{ form.hidden_tag() }}
+        {{ form.load_average_threshold.label }}  {{ form.load_average_threshold }}
+        </div>
+
+       <div id="load_threshold_count">
+        {{ form.hidden_tag() }}
+        {{ form.load_above_threshold_count.label }}  {{ form.load_above_threshold_count }}
+        </div>
+         <br>
+
+       <div id="cpu_wait_warn_level">
+        {{ form.hidden_tag() }}
+        {{ form.wait_warning.label }}  {{ form.wait_warning }}
+        </div>
+
+       <div id="cpu_idle_warn_level">
+        {{ form.hidden_tag() }}
+        {{ form.cpu_idle_warning.label }}  {{ form.cpu_idle_warning }}
+        </div>
+
+  {% for field, errors in form.errors.items() %}
+    <small class="form-text text-muted ">
+        {{ ', '.join(errors) }}
+    </small>
+    {% endfor %}
+
+<!--              -->
+<!--           cpu_wait=cpu_wait_warn,-->
+<!--                 cpu_idle=cpu_idle_warn      -->
+              <br>
+
+          {{ form.submit() }}
+
+  <!-- TODO flask flask settings changed  https://blog.teclado.com/flashing-messages-with-flask/ -->
+
+
+<!-- CPU temp warning              negative to a positive number-->
+<!--GPU temp warning                       negative to a positive number-->
+<!--Ambient temp warning        negative to a positive number-->
+
+
+
+
+
+<!--         <p><input type = "text" name = "name" /></p>-->
+<!--         <p><input type = "submit" value = "submit" /></p>-->
+
+
+<!--        {{ form.submit() }} -->
+
+         <!-- Rounded switch -->
+<!--        <div class="switch">-->
+<!--          <span class="slider round">Reset reboot count</span>-->
+<!--            <input type="checkbox">-->
+<!--        </div>-->
+
+
+
+<!--          <li id="ambient_warning_level">-->
+<!--          <label class="switch">-->
+<!--              <input type="checkbox" id="checked_btn" value="false" name="disable">-->
+<!--          </label>-->
+<!--          </li>-->
+<!-- https://overiq.com/flask-101/form-handling-in-flask/ -->
+
+      </form>
+
+   </body>
+</html>

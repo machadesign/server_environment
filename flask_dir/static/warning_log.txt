@@ -1,0 +1,7 @@
+CPU temperature 10.0,2021-06-21 00:20:00
+GPU temperature 100.0,2021-06-21 00:20:00
+Ambient temperature 99.0,2021-06-21 00:20:00
+Memory used 34,2021-06-21 00:20:00
+Swap used 20.0,2021-06-21 00:20:00
+Warning for 5 or more cycles 15 min load greater than 1,2021-06-21 00:20:00
+Cpu idle 34,2021-06-21 00:20:00

@@ -1,0 +1,292 @@
+body {
+  background-color: #000000;
+}
+.charts {
+ background-color: #000000;
+}
+.Poll-info {
+  background-color: blue;
+}
+
+
+#settings {
+     color: white;
+}
+
+
+
+
+#settings-link {
+    float: left;
+    display: block;
+    color: white;
+}
+
+
+.block {
+ background-color: lightblue;
+ line-height: 100px;
+ height: 100px;
+ margin-top: 20px;
+ margin-bottom: 10px;
+ margin-right: 10px;
+ margin-left: 10px;
+}
+
+h1 {
+  font
+}
+
+h5 {
+  font-size: 50px;
+}
+
+
+/* margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    */
+div#barA {
+  float: right;
+  margin: 4px;
+}
+div#barB {
+  float: right;
+  margin: 4px;
+}
+
+/*
+div#barA {
+  position: absolute;
+  right: 55px;
+ float: right;
+  margin: 4px;
+}
+div#barB {
+  position: absolute;
+ float: right;
+  margin: 4px;
+}
+*/
+
+
+
+
+.selection-bar  {
+  position: relative;
+  background-color: red;
+  height: 50px;
+  position: align;
+  position: relative;
+}
+
+/*
+img#refresh {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 100px;
+    width: 25px;
+    height: 25px;
+}
+*/
+
+img#refresh {
+    display: block;
+    position: absolute;
+    top: 6px;
+    width: 40px;
+    height: 40px;
+    left: 180px;
+    }
+
+
+#refresh {
+    display: block;
+    position: absolute;
+    top: 100px;
+    right: 110px;
+    width: 5px;
+    height: 5px;
+}
+
+
+/*
+.refresh_icon {
+width: 25px;
+height: 25px;
+}
+/*
+
+/* alternative choice */
+/*div#barA {
+  position: absolute;
+  right: 0;
+  vertical-align: middle;
+}*/
+
+/*.charts .Chart_addition {
+  width: 100;
+  height: 100;
+}*/
+
+div#submitbtn {
+  float: right;
+  margin: 4px;
+}
+
+#logContent {
+     /* margin-top: 20px;  */
+    color: white;
+    background-color: black;
+}
+
+
+.Chart_addition {
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.Chart_addition_warnings {
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  width: 500px;
+}
+
+/*Block specified */
+.block p {
+  display: inline-block;
+  line-height: normal;
+  vertical-align: middle;
+  margin: 10px;
+  /* space between the parent div and child div (content) */
+}
+
+.block p {
+/* background: black;
+ line-height: 200px;
+ height: 200px;*/
+ margin: 20px;
+}
+
+h1 {
+  color: white;
+}
+
+#logContentBox {
+    height: 500px;
+    width: 900px;
+    overflow: auto;
+}
+footer {
+  color: white;
+}
+/*media query ranges—or breakpoints*/
+/*Small devices (landscape phones, 576px and up)*/
+
+/* if just want to swithc out image for image */
+/*@media (min-width: 500px){
+.imgname {
+background-image: url(examples/images/image-768.jpg);
+}
+}*/
+table {
+    position: relative;
+}
+
+th {
+    background: black;
+    position: sticky;
+    top: 0;
+    width: 200px;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+
+}
+td {
+    width: 300px;
+}
+
+#managerTable {
+    max-height: 500px;
+    overflow: auto;
+}
+/*------- css style collapsible -------- */
+
+.container_dropdowns {
+	width: 25%;
+	height: 40%;
+	float: left;
+	margin: auto;
+	float: left;
+
+	/*position: absolute;*/
+}
+.container_content {
+
+	width: 25%;
+	height: 50%;
+	margin: auto;
+	float: right;
+}
+
+.container_switch {
+	width: 25%;
+	height: 50%;
+	padding: 20px;
+	margin: auto;
+	float: right;
+}
+
+.collapsible {
+	background-color: #777;
+    color: white;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+}
+
+.active, .collapsible:hover {
+	background-color: grey;
+}
+/* Create and items to the active class -> this.classList.toggle("active") */
+
+
+.sq_content {
+/*	padding: 0 18px; */
+	max-height: 0;
+    overflow: hidden;
+	transition: max-height 0.2s ease-out;
+	background-color: black;
+}
+/* don't necessarily know content size, just defined as max height  */
+
+#square {
+	height:100px;
+	width:100px;
+	background-color: blue;
+}
+
+.collapsible:after {
+	/* inserts something after the content specified */
+	/* Unicode character for "plus" sign (+) */
+  content: '\02795';
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+/* Unicode character for "minus" sign (-) */
+.active:after {
+  content: "\2796";
+}
+
+/*[@id="settings"] */
