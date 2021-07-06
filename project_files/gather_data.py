@@ -16,18 +16,6 @@ import os
 import json
 
 # --------------  System data  ----------------- #
-
-config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
-temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
-# Test - Mock data locally stored in a .txt file
-arm_cpu_reading = "/Users/matthewchadwell/server_environment/mock_cpu_arm_temp/temp"
-get_load_avg = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/load_avg.sh"
-get_system_memory_info = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/memory.sh"
-get_current_time_andup = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/date_uptime_check.sh"
-get_cpu_temperature = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/cpu_temperature.sh"
-get_swap_total_used_free = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/used_swap.sh"
-get_cpu_usage = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/cpu_usage.sh"
-cpu_user_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/cpu_usage_user_kernel.sh"
 # ambient temperature - from sensor_probe_info import current_ambient_temp , loaction w/ sensor id
 
 # --------------   Mock data  ------------------ #
@@ -41,12 +29,12 @@ Mock_date_time_uptime_and_now = '2021-06-21 00:20:00 2021-06-21 00:10:00'
 # current date/ time   # uptime date / time
 # data is parsed  with function   return_uptime_check  and   return_current_date_rb_check
 # into values uptime_date, uptime_time, date_and_time, date_now, time_now
-mock_swap_average_use = "Total swap: 1000 Used swap: 200 Free swap: 300"
+Mock_swap_average_use = "Total swap: 1000 Used swap: 200 Free swap: 300"
 # mock_swap_page_in_out = "Total swap: 3000 Used swap: 0  Page swap ins: 0 Page swap outs: 0"
-mock_cpu_usage = "Cpu idle: 100.00 Io wait: 0.10"
-mock_sys_usage = "%user: 0.10 %system: 0.10"
+Mock_cpu_usage = "Cpu idle: 100.00 Io wait: 0.10"
+Mock_sys_usage = "%user: 0.10 %system: 0.10"
 # Time cpu running user code and kernel(system)
-mock_ambient_temp = 99.0
+Mock_ambient_temp = 99.0
 
 
 # # -------------- COPY  Mock data  ------------------ #
@@ -57,10 +45,10 @@ mock_ambient_temp = 99.0
 # Mock_date_time_uptime_and_now = '2021-06-08 19:49:56 2021-06-08 19:48:56'
 # # data is parsed  with function   return_uptime_check  and   return_current_date_rb_check
 # # into values uptime_date, uptime_time, date_and_time, date_now, time_now
-# mock_swap_average_use = "Total swap: 33 Used swap: 1000 Free swap: 10000"
+# Mock_swap_average_use = "Total swap: 33 Used swap: 1000 Free swap: 10000"
 # # mock_swap_page_in_out = "Total swap: 3000 Used swap: 0  Page swap ins: 0 Page swap outs: 0"
-# mock_cpu_usage = "Cpu idle: 100.92 Io wait: 0.02"
-# mock_sys_usage = "%user: 0.01 %system: 0.02"
+# Mock_cpu_usage = "Cpu idle: 100.92 Io wait: 0.02"
+# Mock_sys_usage = "%user: 0.01 %system: 0.02"
 # # Time cpu running user code and kernel(system) code and
 
 
@@ -69,7 +57,6 @@ mock_ambient_temp = 99.0
 
 
 # --TODO create function to be ran at the begining of all processes checks the values of the JSON file
-
 #-- TODO check for a valid json value, int
 
 def round_value(n,json_key):
@@ -103,13 +90,6 @@ def round_value(n,json_key):
 # -----------------------------  Data from system / bash scripts ---------------------------------#
 
 # Return from system calls  - date_and_time, date_now, time_now, uptime_date, uptime_time
-def return_current_dt_and_uptime():
-    # get dates,times from bash script
-    # current and uptime ,  2021-01-19 20:58:57 2021-01-19 00:45:56
-    current_and_uptime = subprocess.Popen([get_current_time_andup], stdout=subprocess.PIPE, universal_newlines=True)
-    # return current_and_uptime
-    output = current_and_uptime.stdout.readline()
-    return output
 
 def return_current_date_rb_check(current_and_uptime):
     # parse the return_current_dt_and_uptime  - return date now / time now / date time and now
@@ -138,57 +118,6 @@ def temp_function(sensor_id):
         # reads first line of the file , checks CRC(reading good or bad)
         temp_crc = temp_readline.readline()
         return temp_crc
-
-def cpu_temp():
-
-    process = subprocess.Popen([get_cpu_temperature], stdout=subprocess.PIPE, universal_newlines=True)
-    output = process.stdout.readline()
-    return output
-
-    # remove this excerpt ---
-    # with open(arm_cpu_reading) as cpu_reading:
-    #     cpu_temp_reading = cpu_reading.readline()
-    #     return cpu_temp_reading
-
-
-def gpu_temp():
-    # format temp=69.0'C
-    # sudo usermod -aG video <username>   , add user name permission to run   vcgencmd
-    gpu_temperature = os.system('vcgencmd measure_temp')
-    return gpu_temperature
-
-
-def system_load():
-    # load_avg.sh
-    process = subprocess.Popen([get_load_avg], stdout=subprocess.PIPE, universal_newlines=True)
-    # Another thing that you’ll notice is that the output is of type bytes.
-    # You can solve that by typing stdout.decode('utf-8') or by adding universal_newlines=True when calling subprocess
-    output = process.stdout.readline()
-    # reads the first line, otherwise if put readlines would capture all the info and than the response ( 0 or 1 )
-    return output
-
-def system_memory():
-    # memory.sh  Memory in MiB
-    process = subprocess.Popen([get_system_memory_info], stdout=subprocess.PIPE, universal_newlines=True)
-    output = process.stdout.readline()
-    return output
-
-def return_swap_used():
-    current_and_uptime = subprocess.Popen([get_swap_total_used_free], stdout=subprocess.PIPE, universal_newlines=True)
-    # return current total,used and free swap
-    output = current_and_uptime.stdout.readline()
-    return output
-
-
-def cpu_usage():
-    cpu_idle_and_wait = subprocess.Popen([get_cpu_usage], stdout=subprocess.PIPE, universal_newlines=True)
-    output = cpu_idle_and_wait.stdout.readline()
-    return output
-
-def cpu_usage_us_sys():
-    cpu_usage_and_sys = subprocess.Popen([cpu_user_sys], stdout=subprocess.PIPE, universal_newlines=True)
-    output = cpu_usage_and_sys.stdout.readline()
-    return output
 
 
 get_cpu_temp = Mock_cpu_temp_data
@@ -234,5 +163,8 @@ print(uptime_date, uptime_time)
 
 print(date_and_time, date_now, time_now)
 # 2021-06-04 19:49:56 2021-06-04 19:49:56
+
+
+
 
 

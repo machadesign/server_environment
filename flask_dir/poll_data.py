@@ -8,7 +8,9 @@ import pickle
 
 
 
+# db_file = '/Users/matthewchadwell/server_environment/project_files/server_environment.db'
 db_file = '/Users/matthewchadwell/server_environment/project_files/server_environment.db'
+
 file_location = "/Users/matthewchadwell/server_environment/project_files/"
 file_name = 'pickled_file'
 pickled_file_location = file_location + file_name
@@ -94,7 +96,7 @@ print(swap_used_percent)
 
 
 reboot_coutified = read_pickel_get_min_values()
-print('reboot count:' + str(reboot_coutified))
+print(type(reboot_coutified))
 
 
 

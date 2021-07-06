@@ -9,9 +9,8 @@ from db_engine import engine
 meta = MetaData()
 
 environment = Table('environment', meta,
-                    # the collection of tables are defined in the MetaData cataloge
+                    # the collection of tables can be defined in the MetaData cataloge
                     Column('id', Integer, primary_key=True),
-                    Column('date_and_time', String(25)),
                     Column('date', String(20)),
                     Column('time', String(20)),
                     Column('uptime_date', String(20)),
@@ -28,8 +27,10 @@ environment = Table('environment', meta,
                     Column('cpu_idle', Float(20)),
                     Column('percent_of_swap_used', Float(20)),
                     Column('cpu_user_time', Float(20)),
-                    Column('kernel_time', Float(20))
+                    Column('kernel_time', Float(20)),
+                    Column('date_and_time', String(25)),
                     )
+
 
 meta.create_all(engine)
 

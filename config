@@ -1,4 +1,7 @@
 {
   "port": 5050,
-  "sensor_id": "id0101"
+  "ambient_sensor_id": "id0101",
+  "temp_format_round": 1,
+  "time_up_round": 2,
+  "time_check" : 15
 }

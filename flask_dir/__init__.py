@@ -4,14 +4,12 @@
 # put correct database
 # File contains flask logic
 # from gather_data import current_time, current_date, uptime_time, uptime_date
-from sensor_probe_info import current_ambient_temp
 # from server_info import cpu_temp_reading, gpu_temp_reading, percent_of_swap_used, cpu_idle, cpu_wait, kernel_time, cpu_user_time
 # from server_info import mock_sys_load, percent_memory_used, total_memory, memory_used, one_min_avg_load ,five_min_avg_load, fifteen_min_avg_load
 
 import json
 import DateTime
 from flask import jsonify
-import sqlite3
 from flask import g
 from flask import Flask, render_template
 from flask import request, redirect
@@ -27,38 +25,30 @@ import matplotlib
 import base64
 from io import BytesIO
 from datetime import date
-import matplotlib.dates as mdates
+# import matplotlib.dates as mdates
 # from Load_and_reboot_check import reboot_count_checkin
+
 
 
 
 # this will run everytime browser refreshed, accumulating load warnings over and over
 
 # from run_warnings import poll_check  , removed possible calling script twice
-from poll_data import date_and_time, date_now, time_now, uptime_date, uptime_time, reboot_check, ambient_temp, cpu_temp, gpu_temp, \
+from poll_data import date_and_time, date_now, time_now, uptime_date, uptime_time, ambient_temp, cpu_temp, gpu_temp, \
     one_min_load, five_min_load, fifteen_min_load, memory_used_percent, cpu_idle, swap_used_percent, cpu_user_time, \
     kernel_use_time, cpu_wait_time, reboot_coutified
+    # reboot_coutified, reboot_check
 
 
 # poll data from database , checks latest entry
-
-
 # imported values remain constant until script is ran , thus updating all values
-
-
 # create an instance of current reboot count
-
-
 # change the value of reboot count if reboot reset set to zero , this will store value temporaily
-
-
 # reset option needs to be switched back to off
-#
-
-
 
 import numpy as np
 matplotlib.use('Agg')
+
 # Agg is a non-interactive backend, meaning it won't display chart on the screen, only save to files
 # (FIX) added because of error being given (Warning UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.)
 
@@ -167,22 +157,33 @@ class AForm(FlaskForm):
 
 
 # def db_frame_function(plot_title,data_types):
+#def db_frame_function(plot_title, start_date, end_date, data_types)
 def db_frame_function(plot_title, start_date, end_date, data_types):
 
     # data types is the data being shown between range for each date/time specified
-    years = mdates.YearLocator()  # every year
-    months = mdates.MonthLocator()  # every month
-    yearsFmt = mdates.DateFormatter('%Y')
+
+    # years = mdates.YearLocator()  # every year
+    # months = mdates.MonthLocator()  # every month
+    # yearsFmt = mdates.DateFormatter('%Y')
 
     # connect to database and use cursor to lazy load requested data from db( Not all at one once , fetchall())
-    con = get_db() #.cursor()
+    con = get_db()
+    #.cursor()
 
     # Need to setup connection with flask request , and close connection after information retrieved
     # conn = sqlite3.connect(db_file)
 
+    # original sql to pdframe
     dframe = pd.read_sql_query("select * from environment", con)
     # close the connection to the db after data retrieved and data stored in dataframe
     con.close()
+
+    # replace all , # added July 5th
+    # dframe = pd.read_sql("select * from environment", con).replace([None], np.nan)
+
+    # close the connection to the db after data retrieved and data stored in dataframe
+
+
 
     # x = dframe.loc[lambda df: df['date'] == current_date]   (original)
     # dframe['date'] = pd.date_range('2021-1-19', periods=3, freq='D')
@@ -374,12 +375,15 @@ def environment_dashboard():
         # print("beginning" + ":" + start_date_time + "end date/time selected" + ':' + end_date_time)
 
     config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
-    reboot_poll_check = reboot_coutified
+
+
+    # reboot_poll_check = reboot_coutified
     with open(config_file_location) as f:
         y = json.load(f)
     poll = y["poll_check"]
-    if y["reset_reboot_counter"] == "YES":
-        reboot_poll_check = 0
+    # if y["reset_reboot_counter"] == "YES":
+    #     reboot_poll_check = 0
+
     # check if reboot occured , adjust reboot poll
 
 
@@ -402,23 +406,22 @@ def environment_dashboard():
                            cpu_wait=cpu_wait_time,
                            memory=memory_used_percent,
                            swap_memory=swap_used_percent,
-                           reboot=reboot_poll_check,
+                           # reboot=reboot_poll_check,
+                           # reboot=reboot_check,
                            # reboot=reboot_poll_check,
                            # this will only check database , will count reboots over time
-                           # reboot=reboot_count_checkin,
+                           reboot=reboot_coutified,
                            # reboot checkin script w/ load checking will need to be ran separately
                            uptime=uptime_time,
                            uptime_date=uptime_date,
                            percent_swap_used=swap_used_percent,
                            user=cpu_user_time,
                            system=kernel_use_time,
-
                            time_start=start_time,
                            date_start=start,
                            time_end=end_time,
                            date_end=end,
                            # data given to route directly, not queried from db
-
                            last_poll=date_and_time,
                            poll_interval=poll
                            # poll_interval=poll_check,
@@ -435,7 +438,7 @@ def environment_dashboard():
 def login_test():
 
     config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
-    time_check = None
+    # time_check = None
     form = AForm()
     # AFORM used with wtf validate data upon submitiion
     # if request.method == 'POST':     ( form.validate    handles the post/get method check , no need for if statement)
@@ -549,22 +552,22 @@ def login_test():
     return render_template('settings.html', form=form)
 
 
-@app.route('/form-example', methods=['GET', 'POST'])
-def exam_graphing():
-    if request.method == 'POST':
-        first_number = request.form.get('first')
-        second_number = request.form.get('second')
-        # print(second_number)
-        # third_number = int(first_number) + int(second_number)
-        # return first_number, second_number
-        data = ["cpu_temperature", "gpu_temperature", "ambient_temperature"]
-        temp_image_data = db_frame_function(plot_title="temperature_reading", start_date=first_number,end_date=second_number,data_types=data)
-        return render_template('examp_graphing.html', first=first_number, second=second_number, image=temp_image_data)
-    return ''' <form method="POST">
-               <div><label>Language: <input type="date" name="first"></label></div>
-               <div><label>Framework: <input type="text" name="second"></label></div>
-               <input type="submit" value="Submit">
-           </form> '''
+# @app.route('/form-example', methods=['GET', 'POST'])
+# def exam_graphing():
+#     if request.method == 'POST':
+#         first_number = request.form.get('first')
+#         second_number = request.form.get('second')
+#         # print(second_number)
+#         # third_number = int(first_number) + int(second_number)
+#         # return first_number, second_number
+#         data = ["cpu_temperature", "gpu_temperature", "ambient_temperature"]
+#         temp_image_data = db_frame_function(plot_title="temperature_reading", start_date=first_number,end_date=second_number,data_types=data)
+#         return render_template('examp_graphing.html', first=first_number, second=second_number, image=temp_image_data)
+#     return ''' <form method="POST">
+#                <div><label>Language: <input type="date" name="first"></label></div>
+#                <div><label>Framework: <input type="text" name="second"></label></div>
+#                <input type="submit" value="Submit">
+#            </form> '''
 
 
 #         <form method="POST">
@@ -593,7 +596,7 @@ def exam_graphing():
 #     return render_template("image.html", temp_image=image_data,load_image=load_data)
 #
 # # plot_title, start_date, end_date, data_types
-#
+
 #
 # @app.route("/sys_load_image")
 # def sys_load_image():

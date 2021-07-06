@@ -38,7 +38,7 @@ declare -A def_dict
 # 2021-06-08 19:49:56 2021-06-08 19:48:56
 
 #echo $current_date $uptime_check
-current_and_uptime="2021-06-08 19:49:56 2021-06-08 19:48:56"
+current_and_uptime="2021-06-08 19:55:56 2021-06-08 19:48:56"
 
 
 
@@ -50,6 +50,8 @@ def_dict[current_and_uptime]=$current_and_uptime
 
 # mock data
 system_memory="MiB Mem : 7759.2 total, 6718.3 free, 389.0 used, 652.0 buff/cache"
+#system_memory=""
+
 #echo $system_memory
 
 #memory=$(top -n 1 | grep "MiB Mem :")
@@ -82,12 +84,10 @@ cpu_temp_reading=53000
 # cpu_temp_reading=$(</sys/class/thermal/thermal_zone0/temp)
 def_dict[cpu_temp_reading]=$cpu_temp_reading
 
-
-
-
 # --------------- (gpu_temp_reading) gpu_temperature.sh ---------------#
 
 
+#gpu_temp_reading=""
 gpu_temp_reading="temp=100.000'C"
 
 # need to setup config for username??
@@ -105,8 +105,8 @@ def_dict[gpu_temp_reading]=$gpu_temp_reading
 #----------------- (return swap used) used_swap.sh  -------------------#
 
 # mock data
-#swap_average_use="Total swap: 1000 Used swap: 200 Free swap: 300"
-swap_average_use=""
+swap_average_use="Total swap: 1000 Used swap: 200 Free swap: 300"
+#swap_average_use=""
 
 
 # check_pwap_in_out.sh    ---   check if swap has been allocated for machine

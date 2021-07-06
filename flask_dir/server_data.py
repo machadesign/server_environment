@@ -1,11 +1,15 @@
 # create a json object from bash scripts / dictionary
+# provides all parsed system data , ambient temp provided from sesnsor_probe_info.py
+
 import subprocess
 import json
 import ast
 # https://www.digitalocean.com/community/tutorials/how-to-use-subprocess-to-run-external-programs-in-python-3
 
-cpu_usage_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/system_capture_logs.sh"
+cpu_usage_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/TEST_system_capture_logs.sh"
 server_data_file = '/Users/matthewchadwell/server_environment/flask_dir/server_data_dict.json'
+temp_diretory = '/Users/matthewchadwell/server_environment/project_tests/test_temp_reading'
+config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
 
 result = subprocess.run([cpu_usage_sys], capture_output=True, text=True)
 # result = subprocess.run([sys.executable, "-c", "print('ocean')"])
@@ -21,15 +25,8 @@ length_of_list = len(text)
 print(length_of_list)
 
 
-try:
-    with open(server_data_file, 'r') as fp:
-        accounts = json.load(fp)
-except IOError:
-    print('server_data_dict not found, creating one')
-    file1 = open(server_data_file, "w")
-
-
 def bash_to_json():
+    file1 = open(server_data_file, "w")
     value = length_of_list
     for i in text:
         if value == length_of_list:
@@ -60,28 +57,28 @@ def bash_to_json():
             print(j)
     file1.close()
 
+
+def access_system_data():
+    # data excluding data from sensor probe / ambient temp
+    with open(server_data_file) as f:
+        y = json.load(f)
+    system_load_data = y["system_load"]
+    gpu_temp_reading_data = y["gpu_temp_reading"]
+    # sudo usermod -aG video <username>   , add user name permission to run   vcgencmd
+    cpu_temp_reading_data = y["cpu_temp_reading"]
+    system_memory_data = y["system_memory"]
+    cpu_user_sys_data = y["cpu_user_sys"]
+    current_and_uptime_data = y["current_and_uptime"]
+    swap_average_use_data = y["swap_average_use"]
+    cpu_usage = y["cpu_usage"]
+
+    return system_load_data,gpu_temp_reading_data,cpu_temp_reading_data,system_memory_data,cpu_user_sys_data,\
+           current_and_uptime_data,swap_average_use_data,cpu_usage
+
+
 bash_to_json()
-# with open("myfile.txt") as f:
-#     f.readline()
-# print(f)
 
+system_load_data, gpu_temp_reading_data, cpu_temp_reading_data, system_memory_data, cpu_user_sys_data, \
+current_and_uptime_data, swap_average_use_data,cpu_usage = access_system_data()
+print(current_and_uptime_data)
 
-# # initializing string
-# test_string = '{"Nikhil" : 1, "Akshat" : 2, "Akash" : 3}'
-#
-# # printing original string
-# print("The original string : " + str(test_string))
-#
-# # using ast.literal_eval()
-# # convert dictionary string to dictionary
-# res = ast.literal_eval(test_string)
-
-
-
-# data excluding data from sensor probe / ambient temp
-with open(server_data_file) as f:
-    y = json.load(f)
-test_value = y["cpu_user_sys"]
-
-print(test_value)
-print(type(test_value))
