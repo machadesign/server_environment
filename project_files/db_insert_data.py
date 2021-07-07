@@ -23,6 +23,7 @@ from server_info import cpu_temp_reading, gpu_temp_reading, one_min_avg_load, fi
     percent_memory_used, cpu_idle,cpu_wait, percent_of_swap_used, kernel_time, cpu_user_time
 from sensor_probe_info import current_ambient_temp
 from reboot_check import reboot_counted
+# adds 0 or 1 , load_and_reboot checks db after - pickles counted reboots
 
 
 def add_data_to_temp():

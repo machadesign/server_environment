@@ -25,6 +25,7 @@ import matplotlib
 import base64
 from io import BytesIO
 from datetime import date
+import re
 # import matplotlib.dates as mdates
 # from Load_and_reboot_check import reboot_count_checkin
 
@@ -175,8 +176,7 @@ def db_frame_function(plot_title, start_date, end_date, data_types):
 
     # original sql to pdframe
     dframe = pd.read_sql_query("select * from environment", con)
-    # close the connection to the db after data retrieved and data stored in dataframe
-    con.close()
+    # pands df recognizes NULL values from SQL, does not graph unknown values/missing values
 
     # replace all , # added July 5th
     # dframe = pd.read_sql("select * from environment", con).replace([None], np.nan)

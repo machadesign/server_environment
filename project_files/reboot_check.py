@@ -5,10 +5,7 @@
 # reboot counted will hold value of 1 if reboot occurs
 # -----------------------------------
 
-from poll_data import uptime_date, uptime_time, date_now, time_now
-
-
-
+from server_info import uptime_date, uptime_time, date_now, time_now
 
 
 
@@ -83,4 +80,4 @@ reboot_counted = reboot_check_compare_dates(date_now, uptime_date, difference_mi
 # if a reboot occured 1 is th value, if not 0 is
 # reboot time reported , or none if reboot did not occur .
 # single_reboot_count = reboot_check_compare_dates(date_now, uptime_date, difference_minutes)
-print(reboot_counted)
+print("reboot counted" + " " + str(reboot_counted))

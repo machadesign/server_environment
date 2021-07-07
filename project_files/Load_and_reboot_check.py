@@ -10,15 +10,14 @@
 from os import path
 import pickle
 import json
-from reboot_check import reboot_counted
-# from server_info import one_min_avg_load, five_min_avg_load, fifteen_min_avg_load   , current data if page refreshed/upon visit
-# from gather_data import current_date, current_time
+# from reboot_check import reboot_counted
+# # need to capture data before it goes to DB
+from poll_data import one_min_load, five_min_load, fifteen_min_load, reboot_check
+# use the reboot count from db  ( 0 or 1 )
 
 
-from poll_data import one_min_load, five_min_load, fifteen_min_load
-from poll_data import date_now, time_now
-
-
+print(one_min_load,five_min_load,fifteen_min_load)
+print(reboot_check)
 
 
 class Check_system_processes:
@@ -90,7 +89,7 @@ class Check_system_processes:
             rbt_count = 0
             print("Reset number of reboots")
         else:
-            rbt_count = self.reboot_check + reboot_counted
+            rbt_count = self.reboot_check + reboot_check
             print("Reboot count checked")
         return rbt_count
 
@@ -150,29 +149,44 @@ class Check_system_processes:
         return new_dict
 
 
-    def read_pickel_check_updated_values(self):
-        # Read the pickled file for amount of times load value exceeded specified, if over warn count throw a warning
-        in_file = open(self.pickled_file_location, 'rb')
-        new_dict = pickle.load(in_file)
-        in_file.close()
-        if new_dict["fifteen_min_thresh"] >= self.warning_fifteen:
-            self.load_warning = "WARN"
-            message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_fifteen, self.interval, self.fifteen_min_thresh, date_now, time_now)
-            return self.load_warning, message
-        if new_dict["five_min_thresh"] >= self.warning_five_min:
-            self.load_warning = "WARN"
-            message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_five_min, self.interval, self.five_min_thresh, date_now, time_now)
-            return self.load_warning, message
-        if new_dict["one_min_thresh"] >= self.warning_one_min:
-            self.load_warning = "WARN"
-            message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_one_min, self.interval, self.one_min_thresh, date_now, time_now)
-            return self.load_warning, message
-        else:
-            # catch if load threshold does not exceed
-            message = None
-            return self.load_warning, message
+    # def read_pickel_check_updated_values(self):
+    #     # Read the pickled file for amount of times load value exceeded specified, if over warn count throw a warning
+    #     in_file = open(self.pickled_file_location, 'rb')
+    #     new_dict = pickle.load(in_file)
+    #     in_file.close()
+    #     if new_dict["fifteen_min_thresh"] >= self.warning_fifteen:
+    #         self.load_warning = "WARN"
+    #         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_fifteen, self.interval, self.fifteen_min_thresh, date_now, time_now)
+    #         return self.load_warning, message
+    #     if new_dict["five_min_thresh"] >= self.warning_five_min:
+    #         self.load_warning = "WARN"
+    #         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_five_min, self.interval, self.five_min_thresh, date_now, time_now)
+    #         return self.load_warning, message
+    #     if new_dict["one_min_thresh"] >= self.warning_one_min:
+    #         self.load_warning = "WARN"
+    #         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_one_min, self.interval, self.one_min_thresh, date_now, time_now)
+    #         return self.load_warning, message
+    #     else:
+    #         # catch if load threshold does not exceed
+    #         message = None
+    #         return self.load_warning, message
+    #
+    # # def record_reboot_count_to_config(self, reboot_counto):
 
-    # def record_reboot_count_to_config(self, reboot_counto):
+
+###################################################################
+#                # REBOOT CHECK / COUNT                           #
+###################################################################
+# gloabal reboot count
+# Steps:
+
+# pickeled file checked to see if it exists itself
+# if file exists current global value stored -> store_data(self.reboot_check)
+
+# check if setting is YES , if so reboot_cnt set to zero
+# if setting is NO ,  rbt_count = self.reboot_check + reboot_counted
+
+
 
 
 # if __name__ == "__main__":
@@ -193,11 +207,22 @@ check_it.load_threshold_check_incrementer()
 # increments global values for high loads
 check_it.store_data(reboot_number)
 # write to pickled file number of high load occurrences and reboot count
-warning, load_message = check_it.read_pickel_check_updated_values()
-# read the pickled file to get the updated high load and reboot count
-message_about_load = load_message
-warning_given = warning
+
+
+
+
+####-------------- add to Poll data area, calling this script will keep inrmenteing laod checks ----------------########
+# warning, load_message = check_it.read_pickel_check_updated_values()
+# # read the pickled file to get the updated high load and reboot count
+#
+# message_about_load = load_message
+# warning_given = warning
+####-------------- add to Poll data area, calling this script will keep inrmenteing laod checks ----------------########
+
+
 reboot_count_checkin = check_it.check_reboots()
+print(reboot_count_checkin)
+# count added up
 
 
 # open json and write reboot count to it , than reference count to rendered template show in poll block
@@ -207,10 +232,9 @@ reboot_count_checkin = check_it.check_reboots()
 #     data["reboot_counto"] = reboot_count_checkin
 #     json.dump(data, g)
 
-print(message_about_load)
-print(warning_given)
 # example : Warning for 10 or more cycles 1 min load greater than 10,2021-06-09 19:58:56
-print(reboot_count_checkin)
+
+
 
 
 # store reboot count in config
