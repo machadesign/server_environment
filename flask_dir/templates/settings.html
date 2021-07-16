@@ -34,6 +34,14 @@ Generate it with url_for within py script. It can be omitted if the same URL han
         {{ form.poll_check.label }} {{ form.poll_check }}
         </div>
 
+<!--- EMAIL INPUT -->
+
+       <div id="email" >
+        {{ form.hidden_tag() }}
+        {{ form.email.label }} {{ form.email }}
+       </div>
+
+
 
  <!-- REBOOT  -->
 

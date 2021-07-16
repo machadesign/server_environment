@@ -72,12 +72,15 @@ def reboot_check_compare_dates(current_date_only, up_time_date_only, uptime_curr
         # this will print the uptime after bootup
         # reboot did not occur, no value inserted into DB
 
-
+print(uptime_date)
+print(date_now)
 uptime_in_minutes = time_format_to_minutes(uptime_time)
+
 time_now_in_minutes = time_format_to_minutes(time_now)
 difference_minutes = difference_between_up_and_current()
 reboot_counted = reboot_check_compare_dates(date_now, uptime_date, difference_minutes)
 # if a reboot occured 1 is th value, if not 0 is
 # reboot time reported , or none if reboot did not occur .
 # single_reboot_count = reboot_check_compare_dates(date_now, uptime_date, difference_minutes)
+
 print("reboot counted" + " " + str(reboot_counted))

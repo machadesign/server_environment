@@ -3,7 +3,7 @@
 
 import subprocess
 import json
-import ast
+# import ast
 # https://www.digitalocean.com/community/tutorials/how-to-use-subprocess-to-run-external-programs-in-python-3
 
 cpu_usage_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/TEST_system_capture_logs.sh"
@@ -71,7 +71,7 @@ def access_system_data():
     current_and_uptime_data = y["current_and_uptime"]
     swap_average_use_data = y["swap_average_use"]
     cpu_usage = y["cpu_usage"]
-
+    print(y)
     return system_load_data,gpu_temp_reading_data,cpu_temp_reading_data,system_memory_data,cpu_user_sys_data,\
            current_and_uptime_data,swap_average_use_data,cpu_usage
 

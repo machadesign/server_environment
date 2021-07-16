@@ -34,7 +34,7 @@ $(document).ready(function() {
   			// try to select this parent to remove children, cleanup
 
 //            let tableHeaders = ["Warning","Time","Description"]
-            let tableHeaders = ["Warning","Time"]
+            let tableHeaders = ["Warning","Date Time"]
 
             const createTable = () => {
             // TODO -remove all children elements upon creation

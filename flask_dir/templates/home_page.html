@@ -92,19 +92,19 @@
 <h2 style="font-weight: 400; font-size: 22px; color:white; text-align: center;">LAST POLL: {{ last_poll }} <br> POLL INTERVAL: {{ poll_interval }} min</h2>
 
 <div id="poll blocks" class="row">
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="uptime" class="block">
-      <p>System Up Since: <br> {{ uptime_date }} {{ uptime}}</p>
+      <p>System Up Since: <br> {{ uptime_date }} {{ uptime}} <br> Reboots: {{ reboot }}</p>
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-6">
-      <div id="reboot" class="block">
-      <p>Reboots: {{ reboot }}</p>
-      </div>
-    </div>
+<!--    <div class="col-lg-3 col-md-3 col-sm-6">-->
+<!--      <div id="reboot" class="block">-->
+<!--      <p>Reboots: {{ reboot }}</p>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-6">
 <!--    how to hide an element , specify none for screen size <div class="d-lg-none col-md-3 col-sm-6">-->
       <div id="temperature" class="block">
       <p>Ambient: <br> {{ ambient_temp }} °F <br> CPU: {{ cpu_temp }} °F <br> GPU: {{ gpu_temp }} °F </p>
@@ -112,25 +112,25 @@
     </div>
 
 
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="load" class="block">
       <p> avg load status: <br> one min: {{ one_min_load }} <br> five min: {{ five_min_load }} <br> fifteen min: {{ fifteen_min_avg_load }} </p>
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="memory" class="block">
       <p>current total memory usage: <br> {{ memory }} %</p>
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="swap_percentage" class="block">
       <p>swap used: <br> {{ swap_memory }} %</p>
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="cpu_idle_wait" class="block">
       <p>cpu: <br> (idle) {{ cpu_idle }} % (wait) {{ cpu_wait }} %</p>
       </div>
@@ -400,12 +400,11 @@
     var color;
     var reboot = [{{ reboot }}];
     if (reboot > 0) {
-    document.getElementById("reboot").style.backgroundColor = "red";
+    document.getElementById("uptime").style.backgroundColor = "red";
     } else {
-    document.getElementById("reboot").style.backgroundColor = "grey";
+    document.getElementById("uptime").style.backgroundColor = "grey";
     }
     }) ();
-
     </script>
 <script>
 

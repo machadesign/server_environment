@@ -31,6 +31,8 @@ declare -A def_dict
 
 # ---------------- ( current time and uptime ) ---------------- #
 
+
+
 #current_date=$(date '+%F %H:%M:%S')
 #uptime_check=$(uptime -s)
 
@@ -38,9 +40,7 @@ declare -A def_dict
 # 2021-06-08 19:49:56 2021-06-08 19:48:56
 
 #echo $current_date $uptime_check
-current_and_uptime="2021-06-08 19:55:56 2021-06-08 19:48:56"
-
-
+current_and_uptime="2021-06-08 02:35:00 2021-06-08 02:34:00"
 
 def_dict[current_and_uptime]=$current_and_uptime
 
@@ -49,8 +49,12 @@ def_dict[current_and_uptime]=$current_and_uptime
 # ---------------- (memory_used ) ---------------- #
 
 # mock data
-system_memory="MiB Mem : 7759.2 total, 6718.3 free, 389.0 used, 652.0 buff/cache"
-#system_memory=""
+#system_memory="MiB Mem : 7759.2 total, 6718.3 free, 389.0 used, 652.0 buff/cache"
+system_memory="MiB Mem : 1000.0 total, 5.0 free, 0.01 used, 5.0 buff/cache"
+
+# memory calculated
+
+
 
 #echo $system_memory
 
@@ -76,7 +80,11 @@ def_dict[system_memory]=$system_memory
 # echo "$cpu"
 
 # mock data  output example :53000
-cpu_temp_reading=53000
+#cpu_temp_reading=53000
+
+
+#cpu_temp_reading=10000
+cpu_temp_reading=''
 
 # test returned data
 # echo "cpu temp: $cpu"
@@ -88,7 +96,8 @@ def_dict[cpu_temp_reading]=$cpu_temp_reading
 
 
 #gpu_temp_reading=""
-gpu_temp_reading="temp=100.000'C"
+gpu_temp_reading="temp=910.000'C"
+
 
 # need to setup config for username??
 
@@ -105,8 +114,8 @@ def_dict[gpu_temp_reading]=$gpu_temp_reading
 #----------------- (return swap used) used_swap.sh  -------------------#
 
 # mock data
-swap_average_use="Total swap: 1000 Used swap: 200 Free swap: 300"
-#swap_average_use=""
+#swap_average_use="Total swap: 1000 Used swap: 200 Free swap: 300"
+swap_average_use="Total swap: 1000 Used swap: 10 Free swap: 990"
 
 
 # check_pwap_in_out.sh    ---   check if swap has been allocated for machine
@@ -125,7 +134,8 @@ def_dict[swap_average_use]=$swap_average_use
 #---------------- ( return one,five,fifteen min load) -----------------#
 
 #mock data
-system_load='load average: 0.17, 0.28, 0.26'
+#system_load='load average: 0.17, 0.28, 0.26'
+system_load='load average: 1.00, 1.00, 1.00'
 
 # load is split function server_info.py - return_system_performance()
 
@@ -147,7 +157,8 @@ def_dict[system_load]=$system_load
 #-------------- ( cpu_idle ) ------------------#
 
 # mock data
-cpu_usage='Cpu idle: 100.00 Io wait: 0.10'
+#cpu_usage='Cpu idle: 100.00 Io wait: 0.10'
+cpu_usage='Cpu idle: 1.00 Io wait: 1.00'
 
 #cpu_idle=$(iostat -c | awk 'FNR == 4 {print $6}')
 #io_wait=$(iostat -c | awk 'FNR == 4 {print $4}')
@@ -160,7 +171,8 @@ def_dict[cpu_usage]=$cpu_usage
 # ------------------- ( kernel_time, cpu_user_time ) ---------------#
 
 # mock data
-cpu_user_sys="%user: 0.10 %system: 0.10"
+#cpu_user_sys="%user: 0.10 %system: 0.10"
+cpu_user_sys="%user: 1.00 %system: 1.00"
 
 #user_title=$(iostat -c | awk 'FNR == 3 {print $2}')
 ## %user

@@ -7,12 +7,15 @@
 # (User can reset the count back to zero fron config.json)
 # warning file calls for
 
+import os
 from os import path
 import pickle
 import json
 # from reboot_check import reboot_counted
 # # need to capture data before it goes to DB
 from poll_data import one_min_load, five_min_load, fifteen_min_load, reboot_check
+
+print(one_min_load,five_min_load,fifteen_min_load,reboot_check)
 # use the reboot count from db  ( 0 or 1 )
 
 
@@ -72,10 +75,13 @@ class Check_system_processes:
     warning_fifteen = data["load_above_threshold_count"]
 
     def check_if_pickeled_file_exist(self):
+        # this checks if the file exists however does not check if it is empty , If file is empty Ran out of input error occurs
+
         # creates the pickled file if it doesn't exist and first server check performed / first server reading saved to the file
-        if path.exists(self.pickled_file_location):
-            print("file exists")
+        if path.exists(self.pickled_file_location) and os.stat(self.pickled_file_location).st_size != 0:
+            print("file exists and has data")
         else:
+            print("yowzers")
             self.store_data(self.reboot_check)
 
     def check_reboots(self):

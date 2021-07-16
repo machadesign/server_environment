@@ -259,22 +259,24 @@ cpu_idle, cpu_wait = cpu_idle_wait(cpu_usage)
 cpu_user_time, kernel_time = user_and_sys_usage(cpu_user_sys_data)
 
 
-
+print(uptime_date, uptime_time,date_and_time, date_now, time_now,one_min_avg_load, five_min_avg_load,
+      fifteen_min_avg_load, cpu_temp_reading,gpu_temp_reading, percent_memory_used, total_swap, total_used, cpu_idle,
+      cpu_wait, cpu_user_time, kernel_time)
 # values parsed form system calls
 
-print(uptime_date, uptime_time)
-print(date_and_time, date_now, time_now)
-
-print(one_min_avg_load, five_min_avg_load, fifteen_min_avg_load)
-print(percent_memory_used, total_memory, memory_used)
-# 5 7759.2 388.9
-print(one_min_avg_load, five_min_avg_load,fifteen_min_avg_load)
-# 2.9 2.6 1.5
-print(cpu_temp_reading)
-# 99.67
-print(gpu_temp_reading)
-# 101.0
-print(total_swap, total_used, percent_of_swap_used)
-# 0 0 0
-print(cpu_user_time, kernel_time)
-# 0.01 0.02
+# print(uptime_date, uptime_time)
+# print(date_and_time, date_now, time_now)
+#
+# print(one_min_avg_load, five_min_avg_load, fifteen_min_avg_load)
+# print(percent_memory_used, total_memory, memory_used)
+# # 5 7759.2 388.9
+# print(one_min_avg_load, five_min_avg_load,fifteen_min_avg_load)
+# # 2.9 2.6 1.5
+# print(cpu_temp_reading)
+# # 99.67
+# print(gpu_temp_reading)
+# # 101.0
+# print(total_swap, total_used, percent_of_swap_used)
+# # 0 0 0
+# print(cpu_user_time, kernel_time)
+# # 0.01 0.02

@@ -1,11 +1,11 @@
 # -------------------------------------------#
-# Script calls server values from the sql db and
+# Script calls server values from the DB and
 # current reboot count from pickle file
 # -------------------------------------------- #
 
 import sqlite3
 import pickle
-
+import json
 
 
 # db_file = '/Users/matthewchadwell/server_environment/project_files/server_environment.db'
@@ -14,6 +14,26 @@ db_file = '/Users/matthewchadwell/server_environment/project_files/server_enviro
 file_location = "/Users/matthewchadwell/server_environment/project_files/"
 file_name = 'pickled_file'
 pickled_file_location = file_location + file_name
+
+with open("/Users/matthewchadwell/server_environment/project_files/config.json") as f:
+    data = json.load(f)
+
+
+
+    # interval = data["poll_check"]
+interval = data["time_check"]
+
+# specify in config.json if true or false , reset counter
+reboot_reset = data["reset_reboot_counter"]
+print("reboot_reset" + " " + str(reboot_reset))
+
+# (warning level) A specified load avg checked for everytime script runs
+one_min_thresh = data["load_average_threshold"]
+five_min_thresh = data["load_average_threshold"]
+fifteen_min_thresh = data["load_average_threshold"]
+warning_one_min = data["load_above_threshold_count"]
+warning_five_min = data["load_above_threshold_count"]
+warning_fifteen = data["load_above_threshold_count"]
 
 
 # TODO -- need to handle this with an Try Except if index error occurs
@@ -36,7 +56,9 @@ def poll_db_data(db_file):
     #     print(result)
     # for row in poll_info:
     #     print(row)
+    print(result[0])
     return result[0]
+
 
 # def poll_db_data(db_file):
 #     # provide a try : and except :  catch an error if failed connecto todb
@@ -56,19 +78,59 @@ def poll_db_data(db_file):
 #     return result[0]
 
 
+#################################################
+# Pickle file check - Reboot & Load warning check
+# Get warnings directly from pickle so warning files do not keep incrementing when called by init
+##################################################
+
 def read_pickel_get_min_values():
     in_file = open(pickled_file_location, 'rb')
     new_dict = pickle.load(in_file)
-    # returns the values form the pickled file
+    # returns the values form the pickled file , reboot count
     reboot_checkaboot = new_dict["reboot_count"]
 
     in_file.close()
     return reboot_checkaboot
 
 
+def read_pickel_check_updated_values():
+    # Read the pickled file for amount of times load value exceeded specified, if over warn count throw a warning
+
+    in_file = open(pickled_file_location, 'rb')
+    new_dict = pickle.load(in_file)
+    in_file.close()
+    if new_dict["fifteen_min_thresh"] >= warning_fifteen:
+        load_warning = "WARN"
+        message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(warning_fifteen, interval, fifteen_min_thresh, date_now, time_now)
+        return load_warning, message
+    if new_dict["five_min_thresh"] >= warning_five_min:
+        load_warning = "WARN"
+        message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(warning_five_min, interval, five_min_thresh, date_now, time_now)
+        return load_warning, message
+    if new_dict["one_min_thresh"] >= warning_one_min:
+        load_warning = "WARN"
+        message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(warning_one_min, interval, one_min_thresh, date_now, time_now)
+        return load_warning, message
+    else:
+        # catch if load threshold does not exceed
+        message = ""
+        load_warning = ""
+        # --TODO check how represented in warning logs
+        return load_warning, message
+
+# def record_reboot_count_to_config(self, reboot_counto):
+
+
+
+
+
+config_dict = data
+# dict of config
+
 
 row_data = poll_db_data(db_file)
-# dcitionary of queried values
+# dict of db values
+
 date_and_time = row_data['date_and_time']
 date_now = row_data['date']
 time_now = row_data['time']
@@ -89,14 +151,32 @@ kernel_use_time = row_data['kernel_time']
 cpu_wait_time = row_data['cpu_wait']
 cpu_idle = row_data['cpu_idle']
 
-print(poll_db_data(db_file))
-
-
-print(swap_used_percent)
-
-
 reboot_coutified = read_pickel_get_min_values()
-print(type(reboot_coutified))
+# pickled reboot count
+
+warning, load_message = read_pickel_check_updated_values()
+# read the pickled file to get the updated high load and reboot count
+message_about_load = load_message
+warning_given = warning
+
+
+print(message_about_load)
+print(warning_given)
+print(reboot_coutified)
+
+
+
+
+
+
+
+# print(poll_db_data(db_file))
+#
+#
+# print(swap_used_percent)
+
+
+
 
 
 
