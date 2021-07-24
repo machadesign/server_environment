@@ -15,7 +15,7 @@
     "poll_check": 1,
     "reboot_counto": 0,
     "reboot_warning": "ON",
-    "reset_reboot_counter": "NO",
+    "reset_reboot_counter": "YES",
     "round_memory": 2,
     "round_swap": 2,
     "round_system_load": 1,

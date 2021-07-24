@@ -89,7 +89,7 @@ app.config.update(dict(
 # --------------------------------------------------------------------#
 
 
-
+log_location = '/Users/matthewchadwell/server_environment/flask_dir/static/warning_log.txt'
 
 # current_temp = return_current_temp(sensor_id)
 temp_plot = '/images/todays_temp_chart.png'
@@ -242,6 +242,7 @@ def db_frame_function(plot_title, start_date, end_date, data_types, color):
     # same dates returned - one entry for date  , times match starting / ending
     # date_and_time is the column name for line entry in db , format 2021-01-19 21:32:57
 
+
     x = dframe.loc[mask]
     # get all the records between date_and_time specified
     # https://aakashkh.github.io/python/2019/04/08/Indexing-Sorting-Dataframe.html
@@ -286,7 +287,14 @@ def db_frame_function(plot_title, start_date, end_date, data_types, color):
 ### show all data for all ticks
     # need a diff data type for np to recognize data?? #
     # mask = (dframe['date_and_time'] > start_date) & (dframe['date_and_time'] <= end_date)
-    # plt.xticks(np.arange(len(today_sorted), today_sorted))
+
+    # does not work , need a simple date array to define number of x ticks and what there labels will be
+    # need to create an array of dates
+    # dates_only = pd.read_sql_query("select date from environment", con)
+    # does not work , need a simple date array , dfram contains table info
+    # j = np.arange(np.datetime64(dframe['date_and_time'] > start_date & np.datetime64(dframe['date_and_time'] <= end_date)))
+
+    # plt.xticks(np.arange(len(j), j))
 
 #####################################################################
 
@@ -454,10 +462,13 @@ def graph_images(start, end):
 
 
 # TODO header instruction needed set cache to 0
+
+
+
 @app.route("/", methods=["POST", "GET"])
+# <button id="clear-warnings" value="true">Press me</button>
 # known as  a route handler function ,below are mapped to the URL ('/")
 def environment_dashboard():
-
     # try calling data within function using modules
 
     db_file = '/Users/matthewchadwell/server_environment/project_files/server_environment.db'
@@ -515,8 +526,25 @@ def environment_dashboard():
     reboot_count = return_reboot_count()
     # this is the direct queried sql db information returned, COUNT
 
-
+#####################  added July 21st ####################
+    # if request.method == 'POST':
+        # # if form_name == 'true':
+        # clear_data = form2.request['id']
+        #     # javascript provides the true or false value
+        # if clear_data == "true":
+        #     a_file = open(log_location, "w")
+        #     a_file.truncate()
+        #     a_file.close()
+        #     # problem that might treat this from data as part of form data belongs to date section
+#########################################
     if request.method == 'POST':
+        # clear_data = request.form['id']
+        # # button links up id
+        # if clear_data == "true":
+        #     a_file = open(log_location, "w")
+        #     a_file.truncate()
+        #     a_file.close()
+
         # change default dates to posted dates
         end = request.form.get('end_date')
         end_time = request.form.get('end_time')
@@ -656,6 +684,19 @@ def environment_dashboard():
     #                        )
     #
     #
+
+@app.route('/clear_logs', methods=['POST'])
+# perform a get and a post once data submitted
+# javascript is posting the value to be evaluated , tableCleared - true or false
+def helloText():
+    if request.method == 'POST':
+        clear_data = request.form['id']
+    # javascript provides the true or false value
+        if clear_data == "true":
+            a_file = open(log_location, "w")
+            a_file.truncate()
+            a_file.close()
+    return redirect("/", code=200)
 
 
 

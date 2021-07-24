@@ -54,6 +54,8 @@
     <script src="/static/tableCreation.js"></script>
     <!--    <script src="static/loadtxt.js"></script>-->
 
+
+
       <link href="/static/home_page.css" rel="stylesheet" type="text/css">
 
 <!--  <link href="/static/homepage.css" rel="stylesheet" type="text/css">-->
@@ -94,7 +96,7 @@
 <div id="poll blocks" class="row">
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="uptime" class="block">
-      <p>System Up Since: <br> {{ uptime_date }} {{ uptime}} <br> Reboots: {{ reboot }}</p>
+      <p>System Up Since: <br> {{ uptime_date }} {{ uptime }} <br> Reboots: {{ reboot }}</p>
       </div>
     </div>
 
@@ -216,6 +218,12 @@
 
 
   	<div class="col-lg-4">
+
+    <form>
+    <button id="clear-warnings" name="id" value="true">Press me</button>
+    </form>
+<!--    <button id="clear-warnings" name="clear-warnings" value="false">Press me</button> -->
+
       <div class="Chart_addition_warnings" >
   		<!-- once go below Xtra small items will not stack no matter what -->
   		<!-- xsm locked, won't every collapse  -->
@@ -426,6 +434,7 @@ for (i = 0; i < sq.length; i++ ) {
 }
 </script>
 
+<script src="/static/clear_table.js"></script>
 
 <noscript>Sorry, your browser does not support JavaScript!</noscript>
 <!-- if users browsers settings has javascript OFF provide this message -->

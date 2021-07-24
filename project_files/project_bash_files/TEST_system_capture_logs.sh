@@ -40,7 +40,7 @@ declare -A def_dict
 # 2021-06-08 19:49:56 2021-06-08 19:48:56
 
 #echo $current_date $uptime_check
-current_and_uptime="2021-06-08 02:35:00 2021-06-08 02:34:00"
+current_and_uptime="2021-06-08 01:30:00 2021-06-08 00:55:00"
 
 def_dict[current_and_uptime]=$current_and_uptime
 
@@ -96,7 +96,7 @@ def_dict[cpu_temp_reading]=$cpu_temp_reading
 
 
 #gpu_temp_reading=""
-gpu_temp_reading="temp=910.000'C"
+gpu_temp_reading="temp=100.000'C"
 
 
 # need to setup config for username??
@@ -135,7 +135,7 @@ def_dict[swap_average_use]=$swap_average_use
 
 #mock data
 #system_load='load average: 0.17, 0.28, 0.26'
-system_load='load average: 1.00, 1.00, 1.00'
+system_load='load average: 2.00, 1.00, 5.00'
 
 # load is split function server_info.py - return_system_performance()
 

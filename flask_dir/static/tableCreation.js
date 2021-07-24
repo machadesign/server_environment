@@ -1,4 +1,3 @@
-
 //  alternative choice use a button get response   $("button").click(function(){
 //    $("#div1").load("/static/textFile.txt", function(responseTxt, statusTxt, xhr){
 
@@ -103,4 +102,3 @@ $(document).ready(function() {
             createTable();
           });  // end create table
         }); // end of ajax
-
