@@ -1,32 +1,41 @@
 # create a json object from bash scripts / dictionary
 # provides all parsed system data , ambient temp provided from sesnsor_probe_info.py
 
+
 import subprocess
 import json
 # import ast
 # https://www.digitalocean.com/community/tutorials/how-to-use-subprocess-to-run-external-programs-in-python-3
 
-cpu_usage_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/TEST_system_capture_logs.sh"
+
+#cpu_usage_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/sys_capture.sh"
+# cpu_usage_sys = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/TEST_system_capture_logs.sh"
+mock_sys_data = "/Users/matthewchadwell/server_environment/project_files/project_bash_files/inject_mock_data.sh"
+
 server_data_file = '/Users/matthewchadwell/server_environment/flask_dir/server_data_dict.json'
 temp_diretory = '/Users/matthewchadwell/server_environment/project_tests/test_temp_reading'
 config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
 
-result = subprocess.run([cpu_usage_sys], capture_output=True, text=True)
+result = subprocess.run([mock_sys_data], capture_output=True, text=True)
+print(result)
+output = result.stdout
+
+
 # result = subprocess.run([sys.executable, "-c", "print('ocean')"])
 # option to add args to make sjustments edited json file
 # -c component is a python command l-c component is a python command
 # line option that allows you to pass a string with an entire Python program to executeine option that allows you to
 
-
-output = result.stdout
 text = output.split('\n')
+print(text)
 length_of_list = len(text)
-# determine length  , number of 'key value'
+# determine length  , number of 'key value' pairs
 print(length_of_list)
 
 
 def bash_to_json():
     file1 = open(server_data_file, "w")
+    # file1 = open(output, "w")
     value = length_of_list
     for i in text:
         if value == length_of_list:
