@@ -1,31 +1,49 @@
 #!/usr/bin/env python
 # Returns formatted CPU temp , GPU temp, SYS load, Memory, Swap , CPU usage, CPU idle and wait
-
+# Specifying int for values if smaller percentages will zero out numbers, numbers left as floats
+# data formatted to be inserted into the database
+# * means zero-or-more, and + means one-or-more  , using + for multiple digits
 
 # - TODO if memory is running hot return the top consuming PIDs
-
-
 
 import re
 import logging
 import json
 
-from server_data import system_load_data, gpu_temp_reading_data, cpu_temp_reading_data, system_memory_data, \
-cpu_user_sys_data, current_and_uptime_data, swap_average_use_data, cpu_usage
+# from server_data import system_load, gpu_temp_reading_data, cpu_temp_reading_data, system_memory_data, cpu_user_sys_data, current_and_uptime_data, swap_average_use_data, cpu_usage
+# print(system_load_data)
+#
+#
 
-
-
+error_file = '/Users/matthewchadwell/server_environment/project_files/error.log'
 
 # from gather_data import Mock_GPU_data, Mock_cpu_temp_data, Mock_memory,\
 #     Mock_swap_average_use, Mock_sys_usage, Mock_cpu_usage, Mock_sys_load
 
-
+server_data_file = '/Users/matthewchadwell/server_environment/flask_dir/server_data_dict.json'
 # https://docs.python.org/3/library/logging.html
 FORMAT = '%(levelname)s: %(asctime)-15s %(message)s LINE: %(lineno)d MODULE: %(module)s'
-logging.basicConfig(filename="New_erro.log",filemode="a",level=logging.DEBUG, format=FORMAT)
+logging.basicConfig(filename=error_file, filemode="a", level=logging.ERROR, format=FORMAT)
 loggerizing = logging
 config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
 
+
+def access_system_data():
+    # data excluding data from sensor probe / ambient temp
+    with open(server_data_file) as f:
+        y = json.load(f)
+    system_load = y["system_load"]
+    gpu_temp_reading_data = y["gpu_temp_reading"]
+    # sudo usermod -aG video <username>   , add user name permission to run   vcgencmd
+    cpu_temp_reading_data = y["cpu_temp_reading"]
+    system_memory_data = y["system_memory"]
+    cpu_user_sys_data = y["cpu_user_sys"]
+    current_and_uptime_data = y["current_and_uptime"]
+    swap_average_use_data = y["swap_average_use"]
+    cpu_usage = y["cpu_usage"]
+    mock_ambient_sensor_on = y["mock_ambient_sensor_on"]
+
+    return system_load,gpu_temp_reading_data,cpu_temp_reading_data,system_memory_data,cpu_user_sys_data, current_and_uptime_data,swap_average_use_data,cpu_usage, mock_ambient_sensor_on
 
 
 def round_value(n,json_key):
@@ -34,6 +52,18 @@ def round_value(n,json_key):
         data = json.load(r)
         value = round(n, data[json_key])
         return value
+# convert celsius data to Fahrenheit
+# Fahrenheit = (celsius * 1.8) + 32
+
+
+def round_and_convert_Fahrenheit_to_Celsius(n,json_key):
+    # Option to round the CPU temp, GPU temp, Ambient Temp probe , System memory and System load values
+    with open(config_file_location) as r:
+        data = json.load(r)
+        value = round(n, data[json_key])
+        fahrenheit = (value * 1.8) + 32
+        return fahrenheit
+
 
 
 def return_current_date_rb_check(current_and_uptime):
@@ -89,7 +119,8 @@ def return_cpu_temp(arm_cpu_reading):
     try:
         temp = int(arm_cpu_reading)
         temp_format = temp/1000
-        rounded_cpu_temp = round_value(temp_format, "round_temp")
+        rounded_cpu_temp = round_and_convert_Fahrenheit_to_Celsius(temp_format, "round_temp")
+        # rounded_cpu_temp = round_value(temp_format, "round_temp")
         return rounded_cpu_temp
     except Exception:
         loggerizing.error("arm cpu reading error")
@@ -101,20 +132,22 @@ def return_cpu_temp(arm_cpu_reading):
 def return_gpu_temp(Mock_GPU):
     # GPU temperature is read via the firmware interface
     try:
-        gpu_temp_data = re.search(r"(temp=\d*.\d*'C)", Mock_GPU)
-        negative_gpu_temp_data = re.search(r"(temp=-\d*.\d*'C)", Mock_GPU)
+        gpu_temp_data = re.search(r"(temp=\d+.\d+'C)", Mock_GPU)
+        negative_gpu_temp_data = re.search(r"(temp=-\d+.\d+'C)", Mock_GPU)
 
-        gpu_negative_number = re.findall(r'temp=(-\d*.\d*)', Mock_GPU)
-        gpu_positive_number = re.findall(r'temp=(\d*.\d*)', Mock_GPU)
+        gpu_negative_number = re.findall(r'temp=(-\d+.\d+)', Mock_GPU)
+        gpu_positive_number = re.findall(r'temp=(\d+.\d+)', Mock_GPU)
 
         if gpu_temp_data is not None:
             gpu_pos_number = gpu_positive_number[0]
-            return round_value(float(gpu_pos_number), "round_temp")
+            return round_and_convert_Fahrenheit_to_Celsius(float(gpu_pos_number), "round_temp")
+            # return round_value(float(gpu_pos_number), "round_temp")
         elif negative_gpu_temp_data is not None:
             gpu_neg_number = gpu_negative_number[0]
-            return round_value(float(gpu_neg_number), "round_temp")
+            return round_and_convert_Fahrenheit_to_Celsius(float(gpu_neg_number), "round_temp")
+            # return round_value(float(gpu_neg_number), "round_temp")
         else:
-            loggerizing.error(msg="Load data regex mismatch")
+            loggerizing.error(msg="GPU data regex mismatch")
             gpu_temp = None
             return gpu_temp
     except Exception:
@@ -126,7 +159,7 @@ def return_gpu_temp(Mock_GPU):
 
 def return_system_performance(mock_sys_load):
     try:
-        system = re.search(r"([0-9].[0-9]{2}), ([0-9].[0-9]{2}), ([0-9].[0-9]{2})", mock_sys_load)
+        system = re.search(r"([0-9]+.[0-9]+), ([0-9]+.[0-9]+), ([0-9]+.[0-9]+)", mock_sys_load)
         if system is not None:
             one = float(system[1])
             one_min = float(one)
@@ -137,14 +170,16 @@ def return_system_performance(mock_sys_load):
             one_min_avg_load = round_value(one_min, "round_system_load")
             five_min_avg_load = round_value(five_min, "round_system_load")
             fifteen_min_avg_load = round_value(fifteen_min, "round_system_load")
+            print('Good')
             return one_min_avg_load, five_min_avg_load, fifteen_min_avg_load
         else:
             loggerizing.error(msg="Load data regex mismatch")
             one_min_avg_load_err, five_min_avg_load_err, fifteen_min_avg_load_err = [None, None, None]
+            print('Bad')
             return one_min_avg_load_err, five_min_avg_load_err, fifteen_min_avg_load_err
     except Exception:
-        loggerizing.error("system load read error")
-        loggerizing.debug("system laod read error", exc_info=True)
+        loggerizing.error("system Load read error")
+        loggerizing.debug("system Laod read error", exc_info=True)
         one_min_avg_load_err, five_min_avg_load_err, fifteen_min_avg_load_err = [None, None, None]
         return one_min_avg_load_err, five_min_avg_load_err, fifteen_min_avg_load_err
 
@@ -164,7 +199,7 @@ def return_system_memory(Mock_memory):
             free_and_buffer = free_memory + buff_cached
             memory_usage = total_memory - free_and_buffer
         # handle divisible by zero errors
-            calculate_percent_memory_used = int(memory_usage/total_memory * 100)
+            calculate_percent_memory_used = float(memory_usage/total_memory * 100)
             rounded_memory_used = round_value(calculate_percent_memory_used, "round_memory")
             rounded_total_memory = round_value(total_memory, "round_memory")
             rounded_memory_usage = round_value(memory_usage, "round_memory")
@@ -182,13 +217,13 @@ def return_system_memory(Mock_memory):
 def return_percent_swap_used(mock_swap_average_use):
     # swap data handled if zero swap ,otherwise if data error NULL returned
     try:
-        system_swap_data = re.search(r"^Total swap: (\d*) Used swap: (\d*) Free swap: (\d*)$", mock_swap_average_use)
+        system_swap_data = re.search(r"^Total swap: (\d+) Used swap: (\d+) Free swap: (\d+)$", mock_swap_average_use)
         if system_swap_data is not None:
             try:
                 total_swap = int(system_swap_data[1])
                 total_used_swap = int(system_swap_data[2])
                 calculate_percent_swap_used = total_used_swap / total_swap * 100
-                rounded_percent_swap_used = round_value(calculate_percent_swap_used, "round_swap")
+                rounded_percent_swap_used = int(round_value(calculate_percent_swap_used, "round_swap"))
                 return total_swap, total_used_swap, rounded_percent_swap_used
             except ZeroDivisionError:
                 # swap has not been configured for the server
@@ -208,49 +243,56 @@ def return_percent_swap_used(mock_swap_average_use):
 
 def cpu_idle_wait(mock_cpu_usage):
     try:
-        cpu_idle_wait = re.search(r"^Cpu idle: (\d*.\d*) Io wait: (\d*.\d*)$", mock_cpu_usage)
+        cpu_idle_wait = re.search(r"^Cpu idle: (\d+.\d+) Io wait: (\d+.\d+)$", mock_cpu_usage)
         if cpu_idle_wait is not None:
-            cpu_idle_data = cpu_idle_wait[1]
-            cpu_wait_data = cpu_idle_wait[2]
-            return cpu_idle_data, cpu_wait_data
+            cpu_idle_data = float(cpu_idle_wait[1])
+            cpu_wait_data = float(cpu_idle_wait[2])
+            rounded_cpu_idle = round_value(cpu_idle_data,"round_cpu_idle_wait")
+            rounded_cpu_wait = round_value(cpu_wait_data,"round_cpu_idle_wait")
+            return rounded_cpu_idle, rounded_cpu_wait
         else:
             loggerizing.error(msg="swap regex mismatch")
             cpu_idle_err, cpu_wait_err = [None, None]
             return cpu_idle_err, cpu_wait_err
     except Exception:
-        loggerizing.error("cpu ilde_wait read error")
-        loggerizing.debug("cpu ilde_wait read error", exc_info=True)
+        loggerizing.error("cpu idle_wait read error")
+        loggerizing.debug("cpu idle_wait read error", exc_info=True)
         cpu_idle_err, cpu_wait_err = [None, None]
         return cpu_idle_err, cpu_wait_err
 
 
 def user_and_sys_usage(mock_sys_user):
     try:
-        user_and_sys = re.search(r"^%user: (\d*.\d*) %system: (\d*.\d*)$", mock_sys_user)
+        user_and_sys = re.search(r"^%user: (\d+.\d+) %system: (\d+.\d+)$", mock_sys_user)
         if user_and_sys is not None:
-            cpu_time_running = user_and_sys[1]
+            cpu_time_running = float(user_and_sys[1])
+            cpu_time_running_kernel = float(user_and_sys[2])
+
+            rounded_cpu_time = round_value(cpu_time_running, "round_cpu_user_kernel_usage")
+            rounded_time_running_kernel = round_value(cpu_time_running_kernel,"round_cpu_user_kernel_usage")
             # average since boot
-            cpu_time_running_kernel = user_and_sys[2]
-            return cpu_time_running, cpu_time_running_kernel
+
+            return rounded_cpu_time, rounded_time_running_kernel
         else:
             loggerizing.error(msg="user_system reading regex mismatch")
             cpu_idle_err, cpu_wait_err = [None, None]
             return cpu_idle_err, cpu_wait_err
     except Exception:
-        loggerizing.error("user_system read error")
-        loggerizing.debug("user_system read error", exc_info=True)
+        loggerizing.error("User system read error")
+        loggerizing.debug("Usersystem read error", exc_info=True)
         user_usage_err, cpu_usage_err = [None, None]
         return user_usage_err, cpu_usage_err
 
 
-
+system_load, gpu_temp_reading_data, cpu_temp_reading_data, system_memory_data, cpu_user_sys_data, current_and_uptime_data, swap_average_use_data,cpu_usage, mock_ambient_sensor_on = access_system_data()
+print(system_load)
 
 uptime_date, uptime_time = return_uptime_check(current_and_uptime_data)
 # return date and time from bash script ubuntu config w/ flag s -s
 date_and_time, date_now, time_now = return_current_date_rb_check(current_and_uptime_data)
 # return date and time from bash script ubuntu config w/ flag s -s
 
-one_min_avg_load, five_min_avg_load, fifteen_min_avg_load = return_system_performance(system_load_data)
+one_min_avg_load, five_min_avg_load, fifteen_min_avg_load = return_system_performance(system_load)
 cpu_temp_reading = return_cpu_temp(cpu_temp_reading_data)
 gpu_temp_reading = return_gpu_temp(gpu_temp_reading_data)
 percent_memory_used, total_memory, memory_used = return_system_memory(system_memory_data)
@@ -261,9 +303,16 @@ cpu_user_time, kernel_time = user_and_sys_usage(cpu_user_sys_data)
 
 print(uptime_date, uptime_time,date_and_time, date_now, time_now,one_min_avg_load, five_min_avg_load,
       fifteen_min_avg_load, cpu_temp_reading,gpu_temp_reading, percent_memory_used, total_swap, total_used, cpu_idle,
-      cpu_wait, cpu_user_time, kernel_time)
-# values parsed form system calls
-
+      cpu_wait, cpu_user_time, kernel_time, mock_ambient_sensor_on)
+# print(percent_memory_used)
+# print(percent_of_swap_used)
+# # values parsed form system calls
+# print(cpu_idle)
+# print(cpu_user_time)
+# print(kernel_time)
+# print(cpu_idle)
+# print(cpu_wait)
+# print(one_min_avg_load)
 # print(uptime_date, uptime_time)
 # print(date_and_time, date_now, time_now)
 #

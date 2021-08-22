@@ -10,6 +10,7 @@ $(document).ready(function() {
 //    $.get("/static/warning_log.txt", function(data, status) {
 
     var check = $.get("/static/warning_log.txt", function(data, status) {
+    // The first parameter of $.get() is the URL we wish to request ("/static/warning_log.txt").
       console.log( "success" );
     })
       .fail(function() {
@@ -18,13 +19,19 @@ $(document).ready(function() {
       .always(function() {
         console.log( "finished" );
       });
-    check.always(function(data, status) {
 
+    check.always(function(data, status) {
 
 // alternative choice use the get instead loading into div https://www.w3schools.com/jquery/jquery_ajax_get_post.asp
 //    var name = responseTxt;
 //      if(status == "error")  if(status == "success")
+        // if there are 1 or mor lines in the warninglog create the table
 
+        if($.isEmptyObject(data)){
+           alert("This Object is empty.");
+        }else{
+          alert("This Object is not empty.");
+            $('warningTable').empty();
             var name = data;
             var splittext = name.split(/[\r\n]+/)
             var textForCell = name.split(",")
@@ -65,8 +72,14 @@ $(document).ready(function() {
             warningtable.append(warningTableBody)
             tableDiv.append(warningtable)
 
-            for (p=0; p < splittext.length; p++) {
+            length_of_file=splittext.length - 1
+            // issue adding too many rows , subtractone from length of list count
+            for (p=0; p < length_of_file; p++) {
+//            for (p=0; p < splittext.length; p++) {
+
               // iterate through each line of the warning logs
+                   //  TODO -- handle need an if condition , if goes over length stop
+
             		var warningTableRowCells = document.createElement('tr')
                 // create a row for the table (above header alread cretaed and appended to newly created table)
             		warningTableRowCells.class = 'warningRowCells'
@@ -78,7 +91,7 @@ $(document).ready(function() {
                   // iterate through each entry within a warning log line
       		 				lineSection = line.split(',');
       		 				section = lineSection[j];
-      		 				console.log(section)
+      		 				//console.log(section)
 
       		 				var cell = document.createElement("td");
                   // create a cell
@@ -93,12 +106,16 @@ $(document).ready(function() {
 	 			warningTableBody.appendChild(warningTableRowCells)
         //append row to table body (table body is a child of the table, within table )
         // add footer if needed
-		 			}
 
-	 			warningTableBody.appendChild(warningTableRowCells)
+///
+		 			//}
+//	 			warningTableBody.appendChild(warningTableRowCells)
         //append row to table body (table body is a child of the table, within table )
         // add footer if needed
+///
+};
 	 		};
             createTable();
+            };
           });  // end create table
         }); // end of ajax

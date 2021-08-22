@@ -13,15 +13,19 @@
 
 # cron job schedule running this script
 
-python3 /Users/matthewchadwell/server_environment/flask_dir/server_data.py;
-python3 /Users/matthewchadwell/server_environment/project_files/server_info.py;
-python3 /Users/matthewchadwell/server_environment/project_files/reboot_check.py;
-python3 /Users/matthewchadwell/server_environment/project_files/db_insert_data.py;
-python3 /Users/matthewchadwell/server_environment/project_files/Load_and_reboot_check.py;
-python3 /Users/matthewchadwell/server_environment/project_files/run_warnings.py;
-python3 /Users/matthewchadwell/server_environment/flask_dir/send_email.py;
 
-
+#for value in {1..5}
+## implement for loop for quick testing
+#do
+    python3 /Users/matthewchadwell/server_environment/flask_dir/server_data.py;
+    # server_data runs the mock_data_check and system_capture , stores system values in variables
+    python3 /Users/matthewchadwell/server_environment/project_files/server_info.py;
+    python3 /Users/matthewchadwell/server_environment/project_files/reboot_check.py;
+    python3 /Users/matthewchadwell/server_environment/project_files/db_insert_data.py;
+    python3 /Users/matthewchadwell/server_environment/project_files/Load_and_reboot_check.py;
+    python3 /Users/matthewchadwell/server_environment/project_files/run_warnings.py;
+    python3 /Users/matthewchadwell/server_environment/flask_dir/send_email.py;
+#done
 
 
 

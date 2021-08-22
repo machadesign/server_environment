@@ -5,7 +5,6 @@
 
 import re
 import json
-from server_info import round_value
 import logging
 
 
@@ -13,39 +12,70 @@ import logging
 # https://docs.python.org/3/library/logging.html
 FORMAT = '%(levelname)s: %(asctime)-15s %(message)s LINE: %(lineno)d MODULE: %(module)s'
 
-logging.basicConfig(filename="New_erro.log",filemode="a",level=logging.DEBUG, format=FORMAT)
+logging.basicConfig(filename="error.log",filemode="a",level=logging.DEBUG, format=FORMAT)
 loggerizing = logging
-config_file_location = '/Users/matthewchadwell/server_environment/project_files/config.json'
 
 config_json = '/Users/matthewchadwell/server_environment/project_files/config.json'
+server_data_file = '/Users/matthewchadwell/server_environment/flask_dir/server_data_dict.json'
 
+
+with open(server_data_file) as f:
+    # check if mock is on , and return true or false, use mock data or real data
+    y = json.load(f)
+    mock_ambient_sensor_on = y["mock_ambient_sensor_on"]
+    # print(mock_ambient_sensor_on)
 with open(config_json) as r:
     data = json.load(r)
 
-sensor_id = data['ambient_sensor_id']
-mock_temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
+if mock_ambient_sensor_on:
+    print(mock_ambient_sensor_on)
+    # set the desired data file location for the sensor id and tem location variables
+    sensor_id = 'mock_sensor'
+    temp_directory = '/Users/matthewchadwell/server_environment/project_files/'
+else:
+    sensor_id = data['ambient_sensor_id']
+    # config.json sensor ID can be changed at users discretion
+    temp_directory = '/Users/matthewchadwell/mock_temp/temp_id/'
+
+
 # Test - Mock data locally stored in a .txt file
+def round_value(n,json_key):
+    # Option to round the CPU temp, GPU temp, Ambient Temp probe , System memory and System load values
+    with open(config_json) as r:
+        data = json.load(r)
+        value = round(n, data[json_key])
+        return value
 
 
-def temp_function(sensor_id):
-    # get sensor data from it's stored location , from config.json sensor can be changed at users discretion
-    try:
-        # temp_file = temp_directory + sensor_id
-        temp_file = '/Users/matthewchadwell/mock_temp/temp_id/'
-        with open(temp_file) as temp_readline:
-            # reads first line of the file , checks CRC(reading good or bad)
-            temp_crc = temp_readline.readline()
-            return temp_crc
-    except Exception:
-        loggerizing.error("temp crc check error")
-        temp_crc = None
-        return temp_crc
+def round_and_convert_Fahrenheit_to_Celsius(n,json_key):
+    # Option to round the CPU temp, GPU temp, Ambient Temp probe , System memory and System load values
+    with open(config_json) as r:
+        data = json.load(r)
+        value = round(n, data[json_key])
+        fahrenheit = (value * 1.8) + 32
+        return fahrenheit
+
+
+
+# def temp_function():
+#     # return the first line containing the CRC information YES or NO
+#     try:
+#         # get temp directory based on mock or real data check
+#         temp_file = temp_directory + sensor_id
+#         with open(temp_file) as temp_readline:
+#             # reads first line of the file , checks CRC(reading good or bad)
+#             temp_crc = temp_readline.readline()
+#             return temp_crc
+#     except Exception:
+#         loggerizing.error("temp crc check error")
+#         temp_crc = None
+#         return temp_crc
 
 
 def return_ambient_temp():
     # Checks if temperature reading(CRC) good or bad
     try:
-        temp_file = mock_temp_directory + sensor_id
+        temp_file = temp_directory + sensor_id
         with open(temp_file) as temp_readline:
             # reads first line of the file
             # checks if CRC(reading good or bad) ,returns either positive,negative reading or an error
@@ -92,14 +122,17 @@ def check_and_format_temp(temperature_reading):
         return temp_error_code
     else:
         temp_int = int(temperature_reading[0])
-        temp_data = round_value(temp_int / 1000, "round_temp")
+        temp_data = round_and_convert_Fahrenheit_to_Celsius(temp_int / 1000, "round_temp")
+        # temp_data = round_value(temp_int / 1000, "round_temp")
         return temp_data
 
 
 # calls temp function check for good CRC
 # calls check return checks/returns error code if error occurs temp, otherwise returns temp formatted
 temp = return_ambient_temp()
+print(temp)
 ambient_temp_reading = check_and_format_temp(temp)
+print(ambient_temp_reading)
 current_ambient_temp = ambient_temp_reading
 print(current_ambient_temp)
 # return cpu_temp

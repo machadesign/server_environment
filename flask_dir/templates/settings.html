@@ -111,6 +111,8 @@ Generate it with url_for within py script. It can be omitted if the same URL han
         {{ form.cpu_idle_warning.label }}  {{ form.cpu_idle_warning }}
         </div>
 
+
+
   {% for field, errors in form.errors.items() %}
     <small class="form-text text-muted ">
         {{ ', '.join(errors) }}

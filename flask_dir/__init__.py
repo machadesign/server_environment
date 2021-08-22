@@ -33,7 +33,17 @@ import matplotlib
 import base64
 from io import BytesIO
 from datetime import date
-import re
+
+# import logging
+# error_file = '/Users/matthewchadwell/server_environment/project_files/error.log'
+# FORMAT = '%(levelname)s: %(asctime)-15s %(message)s LINE: %(lineno)d MODULE: %(module)s'
+# logging.basicConfig(filename=error_file, filemode="a", level=logging.ERROR, format=FORMAT)
+# loggerizing = logging
+
+
+# import subprocess
+
+# import re
 # import matplotlib.dates as mdates
 # from Load_and_reboot_check import reboot_count_checkin
 
@@ -49,7 +59,10 @@ from poll_data import date_and_time, date_now, time_now, uptime_date, uptime_tim
 
 # from poll_data import row_data, reboot_coutified
 
+file_location = "/Users/matthewchadwell/server_environment/project_files/"
+file_name = 'pickled_file'
 
+pickled_file_location = file_location + file_name
 
 
 # dictionary of values
@@ -88,11 +101,11 @@ app.config.update(dict(
 # sys_mem_used = percent_memory_used
 # --------------------------------------------------------------------#
 
-
+config_file = '/Users/matthewchadwell/server_environment/project_files/config.json'
 log_location = '/Users/matthewchadwell/server_environment/flask_dir/static/warning_log.txt'
 
 # current_temp = return_current_temp(sensor_id)
-temp_plot = '/images/todays_temp_chart.png'
+# temp_plot = '/images/todays_temp_chart.png'
 
 # --TODO  add error default handling
 # error default handling
@@ -141,6 +154,57 @@ def return_reboot_count():
     reboot_count = query_function(entered_query)
     # returns total number of reboots
     return reboot_count
+
+
+def reset_reboots():
+    # def read_pickel_get_min_values():
+    # read pickled file and assign these values to the global variables
+
+    in_file = open(pickled_file_location, 'rb')
+    new_dict = pickle.load(in_file)
+    # returns the values form the pickled file
+    one_min = new_dict["one_min_thresh"]
+    five_min = new_dict["five_min_thresh"]
+    fifteen_min = new_dict["fifteen_min_thresh"]
+    reboot_count = new_dict["reboot_count"]
+
+    in_file.close()
+    print(reboot_count)
+    return one_min, five_min, fifteen_min, reboot_count
+
+
+def store_data(one_min, five_min, fifteen_min, reboot_count):
+    load_and_reboot_count = {}
+    # reset_reboot = 0
+    load_and_reboot_count["one_min_thresh"] = one_min
+    load_and_reboot_count["five_min_thresh"] = five_min
+    load_and_reboot_count["fifteen_min_thresh"] = fifteen_min
+    load_and_reboot_count["reboot_count"] = reboot_count
+    outfile = open(pickled_file_location, 'wb')  # write , byte format
+    # open file for writing
+    pickle.dump(load_and_reboot_count, outfile)
+    # object want to pickle and file to which to save it to
+    outfile.close()
+    print('check' + str(load_and_reboot_count))
+
+def reset_the_reboots():
+    # retain the load counts , set reboot to zero (reset_reboots and store_data)
+    one, five, fifteen, reboots = reset_reboots()
+    print(one, five, fifteen)
+    store_data(one, five, fifteen, 0)
+
+def reset_load_counts():
+    # set load counts to zero, keep reboot count (reset_reboots and store_data)
+    one_min, five_min, fifteen_min, reboot_count = reset_reboots()
+    # apply zero value to all load counts
+    store_data(0,0,0,reboot_count)
+
+def check_load_values():
+    with open(config_file) as f:
+       y = json.load(f)
+       prior_load_set_count = y["load_above_threshold_count"]
+       prior_load_threshold = y["load_average_threshold"]
+       return prior_load_set_count,prior_load_threshold
 
 
 class AForm(FlaskForm):
@@ -475,12 +539,13 @@ def environment_dashboard():
     row_data = poll_db_data(db_file)
     data_dict = row_data
     # return dictionary from db
+    uptime = data_dict['uptime_time']
+    str_uptime = str(uptime)
 
-    # need to call pickled file
+    # get cumulative count of reboots from pickle file , if reset in fe sets to zero
     pickled_file_location = "/Users/matthewchadwell/server_environment/project_files/pickled_file"
     in_file = open(pickled_file_location, 'rb')
     new_dict = pickle.load(in_file)
-    # returns the values form the pickled file , reboot count
     reboot_cnt = new_dict["reboot_count"]
 
     in_file.close()
@@ -571,7 +636,13 @@ def environment_dashboard():
         poll = y["poll_check"]
         counter = y["reset_reboot_counter"]
         if counter == "YES":
+            reset_the_reboots()
             reboot_cnt = 0
+            # subprocess.call("reset_reboot_count_pickle.py", shell=True)
+
+
+    # if reset is true rewrite pickled file  ( upon get request )
+
 
     # Upon selection of reset YES , user brought back to hp reboot count zero shown
     # next poll this will actually zero out pickled value ( reboot_countified )
@@ -619,7 +690,10 @@ def environment_dashboard():
                            # reboot=reboot,  #reboot_coutified,
                            reboot=reboot_cnt,
                            # reboot checkin script w/ load checking will need to be ran separately
-                           uptime=data_dict['uptime_time'],
+
+                           # uptime=data_dict['uptime_time'],
+                           uptime=str_uptime,
+
                            uptime_date=data_dict['uptime_date'],
                            percent_swap_used=data_dict['percent_of_swap_used'],
                            user=data_dict['cpu_user_time'],
@@ -713,7 +787,12 @@ def login_test():
     with open(config_file_location) as f:
         y = json.load(f)
         # Open JSON setting file , load data and over
+        ############################################################
+        # GET  the current load config settings
+        # prior_load_set_count = y["load_above_threshold_count"]
+        # prior_load_threshold = y["load_average_threshold"]
 
+        ###################################
     if form.validate_on_submit():
         # AFORM used with wtf validate data upon submitiion , works if all values qualify
         # TODO - flash('Thank you for the info') refer to https://blog.teclado.com/flashing-messages-with-flask/ , flash meesages stored not shown
@@ -731,6 +810,10 @@ def login_test():
         # Formatting string data from json object, all value sstring
         # add any non int value (key:value) example :  "YES" or bool
         search_dict_for_these_keys = ['reset_reboot_counter', 'reboot_warning','email']
+
+        str_value_dict = {}
+
+
 
         str_value_dict = {}
         # create empty dictionary to hold  search_dict_for_these_keys {key:value}
@@ -751,12 +834,77 @@ def login_test():
 
         # remove all key str values and 'csrf_token', 'submit'
         [dict.pop(key) for key in ['csrf_token', 'submit', 'reset_reboot_counter','reboot_warning','email']]
-
         # removed 'csrf_token', 'submit' ,not part of dict   ,removed 'key2','key3' , because already in correct type format - string
+
+        prior_load_set_count, prior_load_threshold = check_load_values()
+
+        # compare previous submitted (config.json) load threshold check and load count against newly submitted values
+        # if they differ the user is completely changing the laod checks, so no other previous accumulation of counts
+        # should exist , pickled file zeros them out
+        # the next poll will start the new check/count
         for key, value in dict.items():
+            # TODO -- issue saying values
             # dict created from form values submitted
             y[key] = int(value)
+            if key == 'load_average_threshold':
+                if int(value) != int(prior_load_threshold):
+                    reset_load_counts()
+            if key == 'load_above_threshold_count':
+                if int(value) != int(prior_load_set_count):
+                    reset_load_counts()
         y.update(str_value_dict)
+
+        # # create empty dictionary to hold  search_dict_for_these_keys {key:value}
+        #
+        # # get the values for the keys w/ string values(search_dict_for_these_keys)
+        #
+        # for i in search_dict_for_these_keys:
+        #     for key, value in dict.items():
+        #         if key == i:
+        #             # y[key]
+        #             z = str(dict[key])
+        #             str_value_dict.update({key: z})
+        #             # turn booleans into string
+        #
+        #
+        #
+        #
+        #
+        # # remove all key str values and 'csrf_token', 'submit'
+        # [dict.pop(key) for key in ['csrf_token', 'submit', 'reset_reboot_counter','reboot_warning','email']]
+        # y.update(str_value_dict)
+
+        # removed 'csrf_token', 'submit' ,not part of dict   ,removed 'key2','key3' , because already in correct type format - string
+
+
+
+        # prior_load_set_count, prior_load_threshold = check_load_values()
+        #
+        # for key, value in dict.items():
+        #     # dict created from form values submitted
+        #     if key == 'load_average_threshold':
+        #         if value != prior_load_threshold:
+        #             reset_load_counts()
+        #     if key == 'load_above_threshold_count':
+        #         if value != prior_load_set_count:
+        #             reset_load_counts()
+
+
+
+
+        ##########################################################################
+        # SUBMITTED values check if config load thresd/count matches mathces submitted ( config.json dict )
+
+
+        # PRIOR set setting levels ( Form json dict )
+
+        # prior_load_set_count = y["load_above_threshold_count"]
+        # prior_load_threshold = y["load_average_threshold"]
+
+
+
+        ###########################################################################
+
 
 
 # -----------------------------------------------------------------
@@ -781,7 +929,9 @@ def login_test():
         # from dcitionary return jsonify(y)
 
         return redirect("/", code=200)
-    # Upon post
+        # Upon post
+
+
 
     with open(config_file_location) as f:
         get_config = json.load(f)
@@ -800,9 +950,10 @@ def login_test():
     set_reboot_warn = get_config["reboot_warning"]
     reset_reboot = get_config["reset_reboot_counter"]
     set_time = get_config["time_check"]
-    cpu_idle_warn = get_config["cpu_idle"]
-    cpu_wait_warn = get_config["cpu_wait"]
+    cpu_idle_warn = get_config["cpu_idle_warning"]
+    cpu_wait_warn = get_config["wait_warning"]
     email_contact_info = get_config["email"]
+
 
 # add configs into form as default values
 

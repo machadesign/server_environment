@@ -56,7 +56,7 @@ def reboot_check_compare_dates(current_date_only, up_time_date_only, uptime_curr
             diff_list.append(i)
 # TODO - replace w/ list comprehension
 
-    if len(diff_list) < 1 and uptime_current_time_difference <= 5:
+    if len(diff_list) < 1 and uptime_current_time_difference < 3:
         # if there is no difference in uptime and current time (same date)
         # and time difference is less than 5 mins,reboot occured
         # reboot_uptime = uptime_time  , return uptime or system time when reboot count is 1
@@ -71,6 +71,11 @@ def reboot_check_compare_dates(current_date_only, up_time_date_only, uptime_curr
 # TODO - print("System up since {}".format(uptime))
         # this will print the uptime after bootup
         # reboot did not occur, no value inserted into DB
+
+
+
+
+
 
 print(uptime_date)
 print(date_now)

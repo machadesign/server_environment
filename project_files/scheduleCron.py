@@ -3,6 +3,7 @@ from crontab import CronTab
 import json
 
 
+
 # user PUTs /submits a new value, before the cron job runs new scripts
 # log the interval set in json file
 # if the value is different than last recorded
@@ -19,7 +20,7 @@ import json
 
 with open('/Users/matthewchadwell/server_environment/project_files/config.json') as config_file:
     config = json.load(config_file)
-    interval = config["interval_check"]
+    interval = config["poll_check"]
 # open json file access the key value for minute duration
 
 my_cron = CronTab(user='matthewchadwell')
@@ -28,7 +29,9 @@ my_cron = CronTab(user='matthewchadwell')
 my_cron.remove_all()
 # clear all previous jobs
 
-job = my_cron.new(command='python /home/jay/writeDate.py #Monitor_Job')
+job = my_cron.new(command='python3 /home/jay/writeDate.py #Monitor_Job')
+# ./Users/matthewchadwell/server_environment/project_files/run_all_files.sh
+
 # how to create entire new cron job
 
 job.minute.every(interval)

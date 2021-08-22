@@ -15,10 +15,11 @@ file_location = "/Users/matthewchadwell/server_environment/project_files/"
 file_name = 'pickled_file'
 pickled_file_location = file_location + file_name
 
+####################################################################
+            #configuration values#
+####################################################################
 with open("/Users/matthewchadwell/server_environment/project_files/config.json") as f:
     data = json.load(f)
-
-
 
     # interval = data["poll_check"]
 interval = data["time_check"]
@@ -26,7 +27,6 @@ interval = data["time_check"]
 # specify in config.json if true or false , reset counter
 reboot_reset = data["reset_reboot_counter"]
 print("reboot_reset" + " " + str(reboot_reset))
-
 # (warning level) A specified load avg checked for everytime script runs
 one_min_thresh = data["load_average_threshold"]
 five_min_thresh = data["load_average_threshold"]
@@ -112,10 +112,12 @@ def read_pickel_check_updated_values():
         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(warning_one_min, interval, one_min_thresh, date_now, time_now)
         return load_warning, message
     else:
-        # catch if load threshold does not exceed
-        message = ""
-        load_warning = ""
+        # catch if load threshold does not exceed , return "No error" not None , None is checked for if data is invalid/possible issue getting load data
+        # bad regex check performed in server info area , None returned if so. No error returned her if threshold not met
+        message = 'None'
+        load_warning = 'None'
         # --TODO check how represented in warning logs
+        print(message,load_warning)
         return load_warning, message
 
 # def record_reboot_count_to_config(self, reboot_counto):

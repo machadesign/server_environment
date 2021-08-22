@@ -91,12 +91,16 @@
 <!-- Use .container-fluid for a full width container, spanning the entire width of the viewport. -->
 <!-- Use containor and by default mardin will be given , space from edge of viewport-->
 <!--<h2 style="font-weight: 400; font-size: 22px; color:white; text-align: center;"> -->
-<h2 style="font-weight: 400; font-size: 22px; color:white; text-align: center;">LAST POLL: {{ last_poll }} <br> POLL INTERVAL: {{ poll_interval }} min</h2>
+
+<h2 style="font-weight: 400; font-size: 22px; color:white; text-align: center;">LAST POLL: {{ date }} <span class="time"> {{ time }} </span> <br> POLL INTERVAL: {{ poll_interval }} min</h2>
+<!--<h2 style="font-weight: 400; font-size: 22px; color:white; text-align: center;">LAST POLL: {{ last_poll }} <br> POLL INTERVAL: {{ poll_interval }} min</h2>    -->
+
+
 
 <div id="poll blocks" class="row">
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="uptime" class="block">
-      <p>System Up Since: <br> {{ uptime_date }} {{ uptime }} <br> Reboots: {{ reboot }}</p>
+          <p>System Up Since: <br> {{ uptime_date }} <span class="time"> {{ uptime }} </span> <br> Reboots: {{ reboot }}</p>
       </div>
     </div>
 
@@ -116,34 +120,31 @@
 
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="load" class="block">
-      <p> avg load status: <br> one min: {{ one_min_load }} <br> five min: {{ five_min_load }} <br> fifteen min: {{ fifteen_min_avg_load }} </p>
+      <p> System avg load status: <br> one min: {{ one_min_load }} <br> five min: {{ five_min_load }} <br> fifteen min: {{ fifteen_min_avg_load }} </p>
       </div>
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="memory" class="block">
-      <p>current total memory usage: <br> {{ memory }} %</p>
+      <p>Total memory usage: <br> {{ memory }} %</p>
       </div>
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="swap_percentage" class="block">
-      <p>swap used: <br> {{ swap_memory }} %</p>
+      <p>Swap used: <br> {{ swap_memory }} %</p>
       </div>
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="cpu_idle_wait" class="block">
-      <p>cpu: <br> (idle) {{ cpu_idle }} % (wait) {{ cpu_wait }} %</p>
+      <p>Cpu usage: <br> (idle) {{ cpu_idle }} % (wait) {{ cpu_wait }} %</p>
       </div>
     </div>
 
   </div> <!-- end of row -->
 </div> <!-- end of container-->
 </section>
-
-
-
 
 
 <!-- original section -->
@@ -188,6 +189,9 @@
 <!--       <div style="float:right;"> -->
  <!-- end of end-date class -->
     </form>
+        <form>
+    <button id="clear-warnings" name="id" value="true">clear warning log</button>
+    </form>
 </div>
   </section> <!-- end selection-bar -->
 
@@ -218,10 +222,6 @@
 
 
   	<div class="col-lg-4">
-
-    <form>
-    <button id="clear-warnings" name="id" value="true">Press me</button>
-    </form>
 <!--    <button id="clear-warnings" name="clear-warnings" value="false">Press me</button> -->
 
       <div class="Chart_addition_warnings" >
@@ -283,20 +283,6 @@
 <!--      </div>-->
 <!--    </div>-->
 
-  	<div class="col-lg-8">
-      <div class="Chart_addition" >
-  		<!-- once go below Xtra small items will not stack no matter what -->
-  		<!-- xsm locked, won't every collapse  -->
-          <button class="collapsible">kernel user usage</button>
-          <div class="sq_content">
-  		<img src={{ image3 }} class="img-fluid" alt="kernel user usage">
-          </div>
-      <!--640 x 480 -->
-      </div>
-  	</div>
-
-
-
 
 
 <!--    <div class="col-lg-8">-->
@@ -339,6 +325,19 @@
           <button class="collapsible">cpu state</button>
           <div class="sq_content">
   		<img src={{ image5 }} class="img-fluid" alt="cpu state">
+          </div>
+      <!--640 x 480 -->
+      </div>
+  	</div>
+
+
+  	<div class="col-lg-8">
+      <div class="Chart_addition" >
+  		<!-- once go below Xtra small items will not stack no matter what -->
+  		<!-- xsm locked, won't every collapse  -->
+          <button class="collapsible">kernel user usage</button>
+          <div class="sq_content">
+  		<img src={{ image3 }} class="img-fluid" alt="kernel user usage">
           </div>
       <!--640 x 480 -->
       </div>
@@ -432,6 +431,52 @@ for (i = 0; i < sq.length; i++ ) {
 	});
 
 }
+</script>
+
+<!-- _TODO -->
+<!--<script>var poll_time = document.getElementById('poll_time');</script>-->
+
+<script>
+
+time_list = document.getElementsByClassName("time")
+for (i=0; i < time_list.length; i++) {
+    time_val = time_list[i].innerHTML;
+    console.log(time_val)
+  // console.log(time_list[i].innerHTML)
+    uptime = time_val.split(':');
+    hour = uptime[0];
+    minute = uptime[1];
+    second = uptime[2];
+
+    var upt_std_time;
+    var upt_hour=hour;
+    var upt_std_time_minute=minute;
+    var upt_std_second=second;
+    var am_pm_string;
+
+
+   if (hour==12) {
+     upt_hour=hour
+     am_pm_string='pm'
+    } else if (hour==00) {
+     upt_hour=12
+     am_pm_string='am'
+     } else if (hour>12) {
+      upt_hour=hour-12
+      am_pm_string='pm'
+    }
+    else if (hour<12 && hour!=00) {
+        upt_hour=hour
+        am_pm_string='am'
+     }
+
+  <!-- change inner html value -->
+   var upt_str
+   upt_str = upt_hour + ':' + upt_std_time_minute + ':' + upt_std_second + ' ' + am_pm_string;
+   time_list[i].innerHTML = upt_str;
+}
+
+
 </script>
 
 <script src="/static/clear_table.js"></script>

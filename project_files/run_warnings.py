@@ -15,9 +15,11 @@
 # from reboot_check import single_reboot_count
 # from Load_and_reboot_check import message_about_load
 
+# check if none value in poll data for load values
 
 from poll_data import date_and_time, date_now, time_now, uptime_date, uptime_time, ambient_temp, cpu_temp, gpu_temp, \
     memory_used_percent, cpu_idle, swap_used_percent, cpu_wait_time, cpu_idle, reboot_check
+from poll_data import one_min_load, five_min_load, fifteen_min_load
 from poll_data import message_about_load
 
 
@@ -63,8 +65,10 @@ with open(config_json) as f:
     reboot_warning = data["reboot_warning"]
     poll_check = data["poll_check"]
 
-    cpu_idle_warn = data["cpu_idle"]
-    cpu_wait_warn = data["cpu_wait"]
+    # cpu_idle_warn = data["cpu_idle"]
+    # cpu_wait_warn = data["cpu_wait"]
+    cpu_idle_warn = data["cpu_idle_warning"]
+    cpu_wait_warn = data["wait_warning"]
 
 
 
@@ -78,19 +82,19 @@ with open(config_json) as f:
     else:
         if cpu_temp >= cpu_temp_warn:
             # print(str(cpu_temp) + ">=" + str(cpu_temp_warn))
-            list_of_warnings.append("CPU temperature" + " " + str(cpu_temp) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("CPU temperature" + " " + str(cpu_temp) + "F" + "," + str(date_now) + " " + str(time_now))
 
     if gpu_temp is None:
         list_of_warnings.append("No data available  - - " + "GPU temperature" + "," + str(date_now) + " " + str(time_now))
     else:
         if gpu_temp >= gpu_temp_warn:
-            list_of_warnings.append("GPU temperature" + " " + str(gpu_temp) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("GPU temperature" + " " + str(gpu_temp) + "F" + "," + str(date_now) + " " + str(time_now))
 
     if ambient_temp is None:
         list_of_warnings.append("No data available  - - " + "Ambient temperature" + "," + str(date_now) + " " + str(time_now))
     else:
         if ambient_temp >= ambient_temp_warn:
-            list_of_warnings.append("Ambient temperature" + " " + str(ambient_temp) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("Ambient temperature" + " " + str(ambient_temp) + "F" + "," + str(date_now) + " " + str(time_now))
 
     # ------------ Percent of memory/swap used ----------- #
 
@@ -100,14 +104,14 @@ with open(config_json) as f:
         if memory_used_percent >= percent_memory_warning:
             print("memory high")
             # check print(str(cpu_temp) + ">=" + str(cpu_temp_warn))
-            list_of_warnings.append("Memory used" + " " + str(memory_used_percent) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("Memory used" + " " + str(memory_used_percent) + "%" + "," + str(date_now) + " " + str(time_now))
 
     if swap_used_percent is None:
         list_of_warnings.append("No data available  - - " + "Memory used percent" + "," + str(date_now) + " " + str(time_now))
     else:
         if swap_used_percent >= percent_swap_warning:
             print("swap high")
-            list_of_warnings.append("Swap used" + " " + str(swap_used_percent) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("Swap used" + " " + str(swap_used_percent) + "%" + "," + str(date_now) + " " + str(time_now))
 
     # ------------ Cpu idle / wait ----------- #
 
@@ -117,23 +121,55 @@ with open(config_json) as f:
         if cpu_idle >= cpu_idle_warn:
             print("High cpu_idle_high")
             # check print(str(cpu_temp) + ">=" + str(cpu_temp_warn))
-            list_of_warnings.append("Cpu idle" + " " + str(memory_used_percent) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("Cpu idle" + " " + str(cpu_idle) + "%" + "," + str(date_now) + " " + str(time_now))
 
     if cpu_wait_time is None:
         list_of_warnings.append("No data available  - - " + "cpu wait time" + "," + str(date_now) + " " + str(time_now))
     else:
         if cpu_wait_time >= cpu_wait_warn:
             print("High cpu_wait_time")
-            list_of_warnings.append("Wait time" + " " + str(swap_used_percent) + "," + str(date_now) + " " + str(time_now))
+            list_of_warnings.append("Cpu wait" + " " + str(cpu_wait_time) + "%" + "," + str(date_now) + " " + str(time_now))
 
 
     # data from Load_and_reboot_check.py
 
     # ------------ Load warning  ----------- #
 
-    if message_about_load is not None:
-        list_of_warnings.append(message_about_load)
-        print(message_about_load)
+# if data is there ( None )
+    # if not return no data
+# if data is there checked if data is not string "No error" , do not append anything
+    # if data is there and threshold met , append error message
+
+    # check if data is good first , entry point of load dat
+    # if message_about_load:
+
+    if one_min_load or five_min_load or fifteen_min_load:
+        # check if message about load based on    is none , issue w/data provided
+        if message_about_load != 'None':
+            # No error checked based on pickled file
+            list_of_warnings.append(message_about_load)
+    else:
+        list_of_warnings.append("No data available  - - " + "Load" + "," + str(date_now) + " " + str(time_now))
+        # if load goe over append message, if not do not append message
+
+        # if issue with data append this message, if there is an issue should not be compared  with > in polldata
+
+
+
+    # if message_about_load != "None":
+    #     list_of_warnings.append(message_about_load)
+    # #     print("checked" + message_about_load)
+
+
+
+
+# need additional check if data is bad
+
+    # if message_about_load == "None":
+    #     list_of_warnings.append("No data available  - - " + "Load" + "," + str(date_now) + " " + str(time_now))
+    # else:
+    #     list_of_warnings.append(message_about_load)
+    #     print("load is high")
 
     # ------------ Reboot warning ----------- #
 
@@ -176,13 +212,44 @@ def edit_file(log_file):
     return editing
 
 
+# def work_with_file(log_file,a_or_w):
+#     with open(log_file, a_or_w) as file:
+#         # with open , opens file and closes file for you no need to .close
+#         length_list_warns = len(list_of_warnings)
+#         for i in list_of_warnings:
+#             print(i)
+#             if i != 'None':
+#                 file.write(i + "\n")
+#             # TODO -- do not specify new line for the last entry
+#             # file.(write) is specified same for "a" and "w"
+#     print(list_of_warnings)
+
 def work_with_file(log_file,a_or_w):
     with open(log_file, a_or_w) as file:
         # with open , opens file and closes file for you no need to .close
+        length_list_warns = len(list_of_warnings)
+        # length , incrmeneter ++i
+        list_count = 0
         for i in list_of_warnings:
-            file.write(i + "\n")
+            list_count += 1
+            if list_count == list_count and i != 'None':
+                print(list_count)
+                print(list_count)
+                file.write(i + "\n")
+            elif i != 'None':
+                file.write(i + "\n")
+                print(i)
+            else:
+                print("invalid error data")
+
+            # TODO -- do not specify new line for the last entry
             # file.(write) is specified same for "a" and "w"
     print(list_of_warnings)
+
+
+
+
+
 
 # def send_email():
 # display_list()
@@ -191,14 +258,15 @@ def work_with_file(log_file,a_or_w):
 
 #
 def list_of_warnins_emailed():
-    return list_of_warnings
+    # return list_of_warnings
+    print(list_of_warnings)
 
 # you want to only get last entry to warning log
 
+
 if __name__ == '__main__':
+    list_of_warnins_emailed()
     to_append_or_create_and_write = edit_file(warning_log)
-    work_with_file(warning_log, to_append_or_create_and_write)
-
-
-
-
+    print("this is the" + str(warning_log))
+    checkit = work_with_file(warning_log, to_append_or_create_and_write)
+    list_of_warnins_emailed()

@@ -81,7 +81,7 @@ class Check_system_processes:
         if path.exists(self.pickled_file_location) and os.stat(self.pickled_file_location).st_size != 0:
             print("file exists and has data")
         else:
-            print("yowzers")
+            print("no file, or file does not have any data")
             self.store_data(self.reboot_check)
 
     def check_reboots(self):
@@ -154,30 +154,6 @@ class Check_system_processes:
         in_file.close()
         return new_dict
 
-
-    # def read_pickel_check_updated_values(self):
-    #     # Read the pickled file for amount of times load value exceeded specified, if over warn count throw a warning
-    #     in_file = open(self.pickled_file_location, 'rb')
-    #     new_dict = pickle.load(in_file)
-    #     in_file.close()
-    #     if new_dict["fifteen_min_thresh"] >= self.warning_fifteen:
-    #         self.load_warning = "WARN"
-    #         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_fifteen, self.interval, self.fifteen_min_thresh, date_now, time_now)
-    #         return self.load_warning, message
-    #     if new_dict["five_min_thresh"] >= self.warning_five_min:
-    #         self.load_warning = "WARN"
-    #         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_five_min, self.interval, self.five_min_thresh, date_now, time_now)
-    #         return self.load_warning, message
-    #     if new_dict["one_min_thresh"] >= self.warning_one_min:
-    #         self.load_warning = "WARN"
-    #         message = 'Warning for {} or more cycles {} min load greater than {},{} {}'.format(self.warning_one_min, self.interval, self.one_min_thresh, date_now, time_now)
-    #         return self.load_warning, message
-    #     else:
-    #         # catch if load threshold does not exceed
-    #         message = None
-    #         return self.load_warning, message
-    #
-    # # def record_reboot_count_to_config(self, reboot_counto):
 
 
 ###################################################################

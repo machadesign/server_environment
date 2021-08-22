@@ -10,11 +10,20 @@ import mimetypes
 import os.path
 import smtplib
 from run_warnings import list_of_warnings
+import json
 
-sender = 'chankleymatt@gmail.com'
-recepient = 'svp.chadwell@gmail.com'
-subject = 'Upload Completed - Online Fruit Store'
-body = 'All fruits are uploaded to our website successfully. A detailed list is attached to this email.'
+config_json = "/Users/matthewchadwell/server_environment/project_files/config.json"
+
+with open(config_json) as f:
+    data = json.load(f)
+    print(data)
+    contact_email = data["email"]
+    sender_email = data["Sender_email"]
+
+sender = sender_email
+recipient = contact_email
+subject = 'Server snapshot Warnings'
+body = 'The following warnings based on thresholds set and current server data.'
 # attachment_path = 'pdf attachment location'
 
 
@@ -65,6 +74,6 @@ def send_email(sender_a, recepient_a, subject_a, body_a):
 
 
 file = str(list_of_warnings)
+print(file)
 print(list_of_warnings)
-send_email(sender,recepient,subject,body_a=file)
-# send(massage)
+send_email(sender,recipient, subject, body_a=file)

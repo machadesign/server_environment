@@ -125,7 +125,7 @@ def_dict[swap_average_use]=$swap_average_use
 #---------------- ( return one,five,fifteen min load) -----------------#
 
 #mock data
-system_load='load average: 1.17, 1.28, 1.26'
+system_load="load average: 1.17, 1.28, 1.26"
 
 # load is split function server_info.py - return_system_performance()
 
@@ -147,7 +147,7 @@ def_dict[system_load]=$system_load
 #-------------- ( cpu_idle ) ------------------#
 
 # mock data
-cpu_usage='Cpu idle: 100.00 Io wait: 0.10'
+cpu_usage="Cpu idle: 100.00 Io wait: 0.10"
 
 #cpu_idle=$(iostat -c | awk 'FNR == 4 {print $6}')
 #io_wait=$(iostat -c | awk 'FNR == 4 {print $4}')
