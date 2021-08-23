@@ -126,13 +126,19 @@
 
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div id="memory" class="block">
-      <p>Total memory usage: <br> {{ memory }} %</p>
+      <p>Total memory usage: <br> {{ memory }} % <br> Swap used: <br> {{ swap_memory }} %</p>
       </div>
     </div>
 
+<!--    <div class="col-lg-4 col-md-4 col-sm-6">-->
+<!--      <div id="swap_percentage" class="block">-->
+<!--      <p>Swap used: <br> {{ swap_memory }} %</p>-->
+<!--      </div>-->
+<!--    </div>-->
+
     <div class="col-lg-4 col-md-4 col-sm-6">
-      <div id="swap_percentage" class="block">
-      <p>Swap used: <br> {{ swap_memory }} %</p>
+      <div id="kernal_user" class="block">
+      <p>Kernel time: <br> {{ system }} % <br> User time: <br> {{ user }} %</p>
       </div>
     </div>
 
@@ -208,7 +214,7 @@
      <section id='graphs for results' class="charts">
       <div class="row"> <!-- bootstrap requires -->
 
-  	<div class="col-lg-8">
+  	<div class="col-lg-7">
       <div class="Chart_addition" >
   		<!-- once go below Xtra small items will not stack no matter what -->
   		<!-- xsm locked, won't every collapse  -->
@@ -260,7 +266,7 @@
 <!--    </div>-->
 
 
-  	<div class="col-lg-8">
+  	<div class="col-lg-7">
       <div class="Chart_addition" >
   		<!-- once go below Xtra small items will not stack no matter what -->
   		<!-- xsm locked, won't every collapse  -->
@@ -295,7 +301,7 @@
 <!--    </div>-->
 
 
-  	<div class="col-lg-8">
+  	<div class="col-lg-7">
       <div class="Chart_addition" >
   		<!-- once go below Xtra small items will not stack no matter what -->
   		<!-- xsm locked, won't every collapse  -->
@@ -318,7 +324,7 @@
 <!--      </div>-->
 <!--    </div>-->
 
-  	<div class="col-lg-8">
+  	<div class="col-lg-7">
       <div class="Chart_addition" >
   		<!-- once go below Xtra small items will not stack no matter what -->
   		<!-- xsm locked, won't every collapse  -->
@@ -331,11 +337,11 @@
   	</div>
 
 
-  	<div class="col-lg-8">
+  	<div class="col-lg-7">
       <div class="Chart_addition" >
   		<!-- once go below Xtra small items will not stack no matter what -->
   		<!-- xsm locked, won't every collapse  -->
-          <button class="collapsible">kernel user usage</button>
+          <button class="collapsible">kernel/user time</button>
           <div class="sq_content">
   		<img src={{ image3 }} class="img-fluid" alt="kernel user usage">
           </div>
@@ -433,9 +439,8 @@ for (i = 0; i < sq.length; i++ ) {
 }
 </script>
 
-<!-- _TODO -->
-<!--<script>var poll_time = document.getElementById('poll_time');</script>-->
 
+<!-- change military time to standard -->
 <script>
 
 time_list = document.getElementsByClassName("time")

@@ -1,0 +1,8 @@
+"system_load":"load average: 1.39, 1.30, 1.30"
+"gpu_temp_reading":"temp=280.000'C"
+"cpu_temp_reading":"59999"
+"system_memory":"MiB Mem : 7999.2 total, 6718.3 free, 389.0 used, 652.0 buff/cache"
+"cpu_user_sys":"%user: 0.10 %system: 0.10"
+"cpu_usage":"Cpu idle: 190.00 Io wait: 0.10"
+"current_and_uptime":"2021-06-29 19:42:56 2021-06-29 19:42:56"
+"swap_average_use":"Total swap: 1000 Used swap: 200 Free swap: 800"

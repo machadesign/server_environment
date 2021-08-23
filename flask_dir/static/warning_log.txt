@@ -1,0 +1,56 @@
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
+CPU temperature 86.0F,2021-08-19 03:25:00
+GPU temperature 104.0F,2021-08-19 03:25:00
+Warning for 5 or more cycles 1 min load greater than 5,2021-08-19 03:25:00
+Reboot occurred,uptime|2021-08-19 03:24:00 poll|2021-08-19 03:25:00
