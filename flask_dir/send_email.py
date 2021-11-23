@@ -65,8 +65,8 @@ def send_email(sender_a, recepient_a, subject_a, body_a):
 
 # def send_email(message):
     mail_server = smtplib.SMTP_SSL('smtp.gmail.com')
-    mail_pass = 'Chink1bot,,'
-    # mail_pass = getpass.getpass('Chink1bot,,')
+    mail_pass = '********'
+    # mail_pass = getpass.getpass('********')
     # print(sender)
     mail_server.login('chankleymatt@gmail.com', mail_pass)
     mail_server.send_message(message)
